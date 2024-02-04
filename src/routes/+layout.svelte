@@ -1,5 +1,8 @@
 <script lang="ts">
+  import "../satoshi.css";
   import "../app.css";
 </script>
 
-<slot />
+<main class="bg-gray-950">
+  <slot />
+</main>
