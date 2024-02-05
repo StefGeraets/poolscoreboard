@@ -1,29 +1,38 @@
-# create-svelte
+# Pool Scoreboard
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+An MVP for played matches, keeping scores for players and keeping scores for teams.
 
-## Creating a project
+## Setup
 
-If you're seeing this, you've probably already done this step. Congrats!
+Install dependancies:
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm i
 ```
 
-## Developing
+Fill up an `.env` file with the following:
+For my direct colleagues, ask me for the Supabase credentials via slack
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```txt
+# Transaction link from the Supabase Dashboard - port:6543
+DATABASE_URL="LinkToSupabaseConnection"
+# Session link from the Supabase Dashboard - port:5432
+DIRECT_URL="LinkToSupabaseConnection"
+```
+
+Run prisma update
 
 ```bash
-npm run dev
+npx prisma db pull
+npx prisma generate
+```
 
+Run the project
+
+``` bash
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
-```
+``````
 
 ## Building
 
