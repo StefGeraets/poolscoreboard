@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const players = await DB.player.findMany({
+		orderBy: [{wins: 'desc'}],
 		include: {
 			team: true
 		}
@@ -44,5 +45,21 @@ export const actions: Actions = {
 		const id = Number(data.get('id'));
 
 		await DB.team.delete({ where: { id } });
+	},
+	editTeam: async ({ request }) => {
+		const data = await request.formData();
+		const id = Number(data.get('id'));
+		const name = String(data.get('name'));
+
+		if (!name) {
+			return fail(400, { name, missing: true });
+		}
+		
+		await DB.team.update({
+			where: { id },
+			data: { name }
+		});
+
+		return { success: true }
 	}
 };
