@@ -1,12 +1,24 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-	import { fly, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import Dialog from '../lib/components/Dialog.svelte';
+	import type { ActionData } from './$types.js';
 
   let teamCreateDialog: HTMLDialogElement;
 
   export let data;
-  export let form;
+  export let form: ActionData;
+
+  const shouldCloseModal = () => {
+    if (form?.success) {
+      teamCreateDialog.close();
+    }
+  }
+  
+  $: {
+    form
+    shouldCloseModal()
+  }
 </script>
 
 <header class="text-center text-2xl bg-gray-950 text-blue-100 py-5">
@@ -25,7 +37,7 @@
       </button>
     </header>
     <Dialog bind:dialog={teamCreateDialog}>
-      <form method="POST" action="?/createTeam" use:enhance class="flex flex-col gap-4">
+      <form method="POST" action="?/addTeam" use:enhance class="flex flex-col gap-4">
         <label for="name">
           <div class="text-blue-100">Team Name:</div>
           <input 
@@ -33,8 +45,12 @@
             name="name" 
             id="name" 
             placeholder="Enter Team Name" 
+            value={form?.name ?? ''}
             data-1p-ignore 
-            class="w-full text-gray-900 py-1 px-2">
+            class="w-full border rounded text-gray-900 py-1 px-2"
+            class:border-red-400={form?.missing}
+          >
+          {#if form?.missing}<p class="text-red-500">The name field is required</p>{/if}
         </label>
         <button 
           type="submit" 

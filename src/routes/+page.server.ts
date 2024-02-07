@@ -1,6 +1,6 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import DB from '../lib';
-import type { Action, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const players = await DB.player.findMany({
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	createTeam: async ({ request }) => {
+	addTeam: async ({ request }) => {
 		const data = await request.formData();
 		const name = String(data.get('name'));
 
@@ -36,6 +36,8 @@ export const actions: Actions = {
 		await DB.team.create({
 			data: { name: name as string }
 		});
+
+		return { success: true }
 	},
 	deleteTeam: async ({ request }) => {
 		const data = await request.formData();
