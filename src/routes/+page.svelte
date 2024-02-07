@@ -42,7 +42,7 @@
     </Dialog>
     {#each data.teams as team, index }
       <div 
-        class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group"
+        class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
         class:border-b={index + 1 !== data.teams.length}
       >
         <div>
@@ -55,7 +55,13 @@
         </div>
         <div class="text-center text-sm">{team.players.length} players</div>
         <div class="text-end">{team.score}</div>
-        <div class="hidden group-hover:block">
+        <div 
+          class="
+            flex right-0 absolute gap-2 bg-gray-900 translate-x-full
+            group-hover:flex
+            transition-all ease-in-out group-hover:translate-x-0 duration-300
+            "
+        >
           <button>Edit</button>
           <form method="POST" action="?/deleteTeam" use:enhance>
             <input type="hidden" name="id" value={team.id}>
