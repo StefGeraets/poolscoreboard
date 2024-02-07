@@ -1,12 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  let showTeamForm: boolean = false;
-  let dialog: HTMLDialogElement;
-  let showModal: boolean = false;
+	import Dialog from '../lib/components/Dialog.svelte';
 
-  const toggleTeamForm = () => {
-    showTeamForm = !showTeamForm;
-  }
+  let teamCreateDialog: HTMLDialogElement;
 
   export let data;
   export let form;
@@ -22,27 +18,28 @@
       <h2 class="uppercase text-lg font-bold mb-4">Team Scores</h2>
       <button 
         class="rounded h-7 w-7 flex justify-center items-center bg-gray-800 border border-gray-700 hover:bg-gray-700"
-        on:click={() => dialog.showModal()}
+        on:click={() => teamCreateDialog.showModal()}
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
       </button>
     </header>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <dialog
-      bind:this={dialog}
-      on:close={() => (showModal = false)}
-      on:click|self={() => dialog.close()}
-    >
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div on:click|stopPropagation>
-          <form method="POST" action="?/createTeam" use:enhance>
-            <input type="text" name="name" id="name" data-1p-ignore>
-            <button type="submit">Save</button>
-          </form>
-        </div>
-      </dialog>
+    <Dialog bind:dialog={teamCreateDialog}>
+      <form method="POST" action="?/createTeam" use:enhance class="flex flex-col gap-4">
+        <label for="name">
+          <div class="text-blue-100">Team Name:</div>
+          <input 
+            type="text" 
+            name="name" 
+            id="name" 
+            placeholder="Enter Team Name" 
+            data-1p-ignore 
+            class="w-full text-gray-900 py-1 px-2">
+        </label>
+        <button 
+          type="submit" 
+          class="block text-blue-100 font-medium uppercase py-1 px-2 rounded bg-gray-800 border border-gray-700 hover:bg-gray-700">Save</button>
+      </form>
+    </Dialog>
     {#each data.teams as team, index }
       <div 
         class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group"
@@ -78,40 +75,3 @@
     {/each}
   </p>
 </div>
-
-<style>
-  	dialog {
-		max-width: 32em;
-		border-radius: 0.2em;
-		border: none;
-		padding: 0;
-	}
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
-	}
-	dialog > div {
-		padding: 1em;
-	}
-	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	@keyframes zoom {
-		from {
-			transform: scale(0.95);
-		}
-		to {
-			transform: scale(1);
-		}
-	}
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
-	@keyframes fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-</style>
