@@ -111,6 +111,13 @@ export const actions: Actions = {
 		const player2Id = Number(data.get('player2'));
 		const winnerId = Number(data.get('winner'));
 
+		const players = await DB.player.findMany({ 
+			where: {id: { in: [player1Id, player2Id]}}, 
+			include: {
+				team: true
+			}
+		})
+
 		const winningPlayer = await DB.player.findFirst({ 
 			where: {id: winnerId}, 
 			include: {
@@ -133,12 +140,14 @@ export const actions: Actions = {
 			}
 		})
 
-		await DB.team.update({
-			where: {id: winningPlayer.team.id },
-			data: {
-				score: winningPlayer.team.score + 1
-			}
-		})
+		if(players[0].teamId !== players[1].teamId) {
+			await DB.team.update({
+				where: {id: winningPlayer.team.id },
+				data: {
+					score: winningPlayer.team.score + 1
+				}
+			})
+		}
 
 		return { success: true }
 	}

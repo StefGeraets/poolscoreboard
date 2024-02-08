@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import Card from '../lib/components/Card.svelte';
-import type { ActionData } from './$types.js';
+  import type { ActionData } from './$types.js';
 	import TeamsCard from './TeamsCard.svelte';
 	import { enhance } from '$app/forms';
 	import PlayerCard from './PlayerCard.svelte';
