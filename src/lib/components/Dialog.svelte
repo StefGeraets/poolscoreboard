@@ -8,7 +8,7 @@
   bind:this={dialog}
   on:close
   on:click|self={() => dialog.close()}
-  class="bg-gray-900 border border-gray-800 rounded shadow-lg max-w-lg px-4 py-4"
+  class="bg-gray-900 border border-gray-800 rounded shadow-lg max-w-xl px-4 py-4"
 >
 	<slot/>
 </dialog>
