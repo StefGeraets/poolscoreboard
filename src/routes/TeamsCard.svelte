@@ -102,7 +102,7 @@
         {#if index + 1 === 1 && team.score !== 0}
           🏆
         {/if}
-        <span class="font-bold">{team.name} {team.id}</span>
+        <span class="font-bold">{team.name}</span>
       </div>
       <div class="text-center text-sm">{team.players.length} players</div>
       <div class="text-end">{team.score}</div>
