@@ -112,13 +112,13 @@
       >
         <div>
           {#if match.winnerId === match.player1Id}
-            :tada:
+            🎉
           {/if}
           <span class="font-bold">{match.player1.name}</span>
         </div>
         <div>
           {#if match.winnerId === match.player2Id}
-            :tada:
+            🎉
           {/if}
           <span class="font-bold">{match.player2.name}</span>
         </div>
