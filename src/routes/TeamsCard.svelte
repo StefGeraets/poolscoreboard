@@ -18,6 +18,9 @@
   let teamId: number;
   let teamName: string;
 
+  let className: string = '';
+  export { className as class };
+
   export let teamData: TeamWithPlayers[];
   export let form: ActionData;
 
@@ -36,7 +39,7 @@
   }
 </script>
 
-<Card span="{2}" showModal={createButtonModal}>
+<Card span="{2}" showModal={createButtonModal} class={className || ''}>
   <svelte:fragment slot="title">Team Scores</svelte:fragment>
 
   <Dialog bind:dialog={teamCreateDialog}>

@@ -1,13 +1,17 @@
 <script lang="ts">
-  type SpanOptions = 1 | 2 | 3
+  type SpanOptions = 1 | 2 | 3;
+
+  let className: string = '';
+  export { className as class };
+
   export let span: SpanOptions = 1
   export let showModal: (() => void) | undefined = undefined;
 
   const setColSpan = (span: SpanOptions) => {
     switch (span) {
-      case 1: return "col-span-1"
-      case 2: return "col-span-2"
-      case 3: return "col-span-3"
+      case 1: return "lg:col-span-1"
+      case 2: return "lg:col-span-2"
+      case 3: return "lg:col-span-3"
       default:
         return "col-span-1"
     }
@@ -16,7 +20,7 @@
 </script>
 
 <section 
-  class="bg-gray-900 rounded-lg border border-gray-800 p-4 {colSpan} tabular-nums self-start"
+  class="bg-gray-900 rounded-lg border border-gray-800 p-4 {colSpan} md:col-span-1 tabular-nums self-start {className || ''}"
 >
   <header class="flex justify-between align-middle">
     <h2 class="uppercase text-lg font-bold mb-4">
