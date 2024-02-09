@@ -1,31 +1,14 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import DB from '../lib';
 import type { PageServerLoad } from './$types';
+import { matches, players, teams } from '../lib/db/fetches';
 
 export const load: PageServerLoad = async () => {
-	const players = await DB.player.findMany({
-		orderBy: [{wins: 'desc'}],
-		include: {
-			team: true
-		}
-	});
-	const teams = await DB.team.findMany({
-		orderBy: [{score: 'desc'}],
-		include: {
-			players: true
-		}
-	});
-	const matches = await DB.match.findMany({
-		orderBy: [{createdAt: 'desc'}],
-		include: {
-			player1: true,
-			player2: true,
-			winner: true
-		},
-		take: 20
-	});
-
-	return { players, teams, matches };
+	return { 
+		players: players(), 
+		teams: teams(), 
+		matches: matches()
+	};
 };
 
 export const actions: Actions = {

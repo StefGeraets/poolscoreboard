@@ -13,7 +13,19 @@
 </header>
 
 <div class="container mx-auto grid lg:grid-cols-7 md:grid-cols-3 grid-cols-1 gap-4">
-  <TeamsCard teamData={data.teams} {form} class="order-3 md:order-1"/>
-  <PlayerCard playerData={data.players} teamData={data.teams} {form} class="order-2 md:order-2"/>
-  <MatchesCard playerData={data.players} matchData={data.matches} {form} class="order-1 md:order-3"/>
+  {#await data.teams}
+    Loading
+  {:then teams} 
+    <TeamsCard teamData={teams} {form} class="order-3 md:order-1"/>
+  {/await}
+  {#await Promise.all([data.players, data.teams])}
+    Loading
+  {:then [players, teams]} 
+    <PlayerCard playerData={players} teamData={teams} {form} class="order-2 md:order-2"/>
+  {/await}
+  {#await Promise.all([data.players, data.matches])}
+    Loading
+  {:then [players, matches]} 
+    <MatchesCard playerData={players} matchData={matches} {form} class="order-1 md:order-3"/>
+  {/await}
 </div>
