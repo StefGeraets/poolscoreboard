@@ -18,10 +18,5 @@ export const teams = async () => {
 export const matches = async () => {
   return await DB.match.findMany({
   orderBy: [{createdAt: 'desc'}],
-  include: {
-    player1: true,
-    player2: true,
-    winner: true
-  },
   take: 20
 })};

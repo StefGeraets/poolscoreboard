@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import Card from "$lib/components/Card.svelte";
 	import Dialog from "$lib/components/Dialog.svelte";
-	import { Prisma } from "@prisma/client";
+	import { Prisma, type Match } from "@prisma/client";
 	import type { ActionData } from "./$types";
 	import { slide } from "svelte/transition";
 
@@ -11,17 +11,8 @@
 			team: true
 		}
   }>
-
-  type MatchesWithPlayers = Prisma.MatchGetPayload<{
-    include: {
-			player1: true,
-      player2: true,
-      winner: true
-		}
-  }>
-
   
-  export let matchData: MatchesWithPlayers[];
+  export let matchData: Match[];
   export let playerData: PlayerWithTeams[];
   export let form: ActionData;
   let className: string = '';
@@ -42,6 +33,10 @@
     const player2 = playerData.find(pl => pl.id === id2)
 
     return [player1, player2]
+  }
+
+  const findPlayer = (id: number) => {
+    return playerData.find((p) => p.id === id);
   }
 
   $: {
@@ -121,13 +116,13 @@
         {#if match.winnerId === match.player1Id}
           🎉
         {/if}
-        <span class="font-bold">{match.player1.name}</span>
+        <span class="font-bold">{findPlayer(match.player1Id)?.name}</span>
       </div>
       <div>
         {#if match.winnerId === match.player2Id}
           🎉
         {/if}
-        <span class="font-bold">{match.player2.name}</span>
+        <span class="font-bold">{findPlayer(match.player2Id)?.name}</span>
       </div>
     </div>
   {/each}
