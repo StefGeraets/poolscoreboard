@@ -2,18 +2,12 @@
 	import { enhance } from "$app/forms";
 	import Card from "$lib/components/Card.svelte";
 	import Dialog from "$lib/components/Dialog.svelte";
-	import { Prisma, type Match } from "@prisma/client";
+	import type { Match, Player } from "@prisma/client";
 	import type { ActionData } from "./$types";
 	import { slide } from "svelte/transition";
-
-  type PlayerWithTeams = Prisma.PlayerGetPayload<{
-    include: {
-			team: true
-		}
-  }>
   
   export let matchData: Match[];
-  export let playerData: PlayerWithTeams[];
+  export let playerData: Player[];
   export let form: ActionData;
   let className: string = '';
   export { className as class };

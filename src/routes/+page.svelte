@@ -32,7 +32,7 @@
     </svg>
   </div>
   {:then [teams, players, matches]} 
-    <TeamsCard teamData={teams} {form} class="order-3 md:order-1"/>
+    <TeamsCard teamData={teams} playerData={players} {form} class="order-3 md:order-1"/>
     <PlayerCard playerData={players} teamData={teams} {form} class="order-2 md:order-2"/>
     <MatchesCard playerData={players} matchData={matches} {form} class="order-1 md:order-3"/>
   {/await}

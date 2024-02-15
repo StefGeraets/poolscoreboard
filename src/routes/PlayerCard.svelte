@@ -1,21 +1,10 @@
 <script lang="ts">
-	import type { Prisma } from "@prisma/client";
+	import type { Player, Team } from "@prisma/client";
 	import Dialog from "../lib/components/Dialog.svelte";
 	import { enhance } from "$app/forms";
   import type { ActionData } from './$types.js';
 	import { slide } from "svelte/transition";
 	import Card from "../lib/components/Card.svelte";
-
-  type TeamWithPlayers = Prisma.TeamGetPayload<{
-    include: {
-			players: true
-		}
-  }>
-  type PlayerWithTeams = Prisma.PlayerGetPayload<{
-    include: {
-			team: true
-		}
-  }>
 
   let playerCreateDialog: HTMLDialogElement
   let playerEditDialog: HTMLDialogElement
@@ -27,8 +16,8 @@
   let className: string = '';
   export { className as class };
 
-  export let playerData: PlayerWithTeams[];
-  export let teamData: TeamWithPlayers[];
+  export let playerData: Player[];
+  export let teamData: Team[];
   export let form: ActionData;
 
   const shouldCloseModal = () => {
@@ -127,7 +116,7 @@
         {/if}
         <span class="font-bold">{player.name}</span>
       </div>
-      <div class="text-center text-sm">{player.team.name}</div>
+      <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
       <div class="text-end">{player.wins}</div>
       <div 
         class="
@@ -141,7 +130,7 @@
           on:click={() => {
             playerId = player.id,
             playerName = player.name
-            teamId = player.team.id
+            teamId = player.teamId
             playerEditDialog.showModal();
           }}
         >
