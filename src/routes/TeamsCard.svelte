@@ -21,8 +21,8 @@
 
   const shouldCloseModal = () => {
     if (form?.success) {
-      teamCreateDialog.close();
-      teamEditDialog.close();
+      teamCreateDialog?.close();
+      teamEditDialog?.close();
     }
   }
 

@@ -19,7 +19,7 @@
   const createButtonModal = () => matchCreateDialog.showModal()
   const shouldCloseModal = () => {
     if (form?.success) {
-      matchCreateDialog.close();
+      matchCreateDialog?.close();
     }
   }
   const selectedPlayers = (id1: number, id2: number) => {
