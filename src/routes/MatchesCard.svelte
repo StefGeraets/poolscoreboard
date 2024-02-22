@@ -10,6 +10,7 @@
   export let playerData: Player[];
   export let form: ActionData;
   let className: string = '';
+  let working: boolean = false;
   export { className as class };
 
   let matchCreateDialog: HTMLDialogElement
@@ -17,11 +18,7 @@
   let selectedPlayer2: number = 0;
   
   const createButtonModal = () => matchCreateDialog.showModal()
-  const shouldCloseModal = () => {
-    if (form?.success) {
-      matchCreateDialog?.close();
-    }
-  }
+
   const selectedPlayers = (id1: number, id2: number) => {
     const player1 = playerData.find(pl => pl.id === id1)
     const player2 = playerData.find(pl => pl.id === id2)
@@ -33,19 +30,34 @@
     return playerData.find((p) => p.id === id);
   }
 
-  $: {
-    form
-    shouldCloseModal()
+  const handleSubmit = () => {
+    working = true
   }
-  $: winnerPool = selectedPlayers(selectedPlayer1, selectedPlayer2)
 
+  const enhanceFormSubmit = () => {
+    return async({result, update}) => {
+      if(result.data.success) {
+        working = false;
+        matchCreateDialog?.close();
+        update();
+      }
+    }
+  }
+
+  $: winnerPool = selectedPlayers(selectedPlayer1, selectedPlayer2)
 </script>
 
 <Card span={3} showModal={createButtonModal} class={className || ''}>
   <svelte:fragment slot="title">Matches</svelte:fragment>
 
   <Dialog bind:dialog={matchCreateDialog}>
-    <form method="POST" action="?/addMatch" use:enhance class="flex flex-col gap-4 text-blue-100">
+    <form 
+      method="POST" 
+      action="?/addMatch" 
+      on:submit|preventDefault={handleSubmit}
+      use:enhance={enhanceFormSubmit}
+      class="flex flex-col gap-4 text-blue-100"
+    >
       <div class="grid grid-cols-2 gap-4 w-full">
         <label for="player1">
           <div class="text-blue-100">Select Challenger:</div>
@@ -96,7 +108,14 @@
       </label>
       <button 
         type="submit" 
-        class="block text-blue-100 font-medium uppercase py-1 px-2 rounded bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-blue-400">Save</button>
+        disabled={working}
+        class="block text-blue-100 text-center font-medium uppercase py-1 px-2 rounded bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-blue-400 disabled:bg-gray-700 disabled:cursor-wait">
+          {#if !working}
+            Save
+          {:else}
+            <svg xmlns="http://www.w3.org/2000/svg" class="animate-spin mx-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+          {/if}
+      </button>
     </form>
   </Dialog>
 
@@ -106,13 +125,13 @@
       class="grid grid-cols-2 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
       class:border-b={index + 1 !== matchData.length}
     >
-      <div>
+      <div class:text-green-500={match.winnerId === match.player1Id}>
         {#if match.winnerId === match.player1Id}
           🎉
         {/if}
         <span class="font-bold">{findPlayer(match.player1Id)?.name}</span>
       </div>
-      <div>
+      <div class:text-green-500={match.winnerId === match.player2Id}>
         {#if match.winnerId === match.player2Id}
           🎉
         {/if}

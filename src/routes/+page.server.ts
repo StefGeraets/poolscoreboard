@@ -58,8 +58,13 @@ export const actions: Actions = {
 			return fail(400, { name, missing: true });
 		}
 
+		const strippedName = name.replace(
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+      ''
+    ).trim();
+
 		await DB.player.create({
-			data: { name, teamId }
+			data: { name: strippedName, teamId }
 		});
 
 		return { success: true }
@@ -79,10 +84,15 @@ export const actions: Actions = {
 		if (!name) {
 			return fail(400, { name, missing: true });
 		}
+
+		const strippedName = name.replace(
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+      ''
+    ).trim();
 		
 		await DB.player.update({
 			where: { id },
-			data: { name, teamId }
+			data: { name: strippedName, teamId }
 		});
 
 		return { success: true }
