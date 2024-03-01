@@ -4,7 +4,6 @@
 	import Card from "$lib/components/Card.svelte";
 	import Dialog from "$lib/components/Dialog.svelte";
 	import type { Match, Player } from "@prisma/client";
-	import type { ActionData } from "./$types";
 	import { slide } from "svelte/transition";
   
   export let matchData: Match[];
@@ -119,7 +118,7 @@
     </form>
   </Dialog>
 
-  {#each matchData as match, index }
+  {#each matchData.slice(0, 10) as match, index }
     <div 
       transition:slide
       class="grid grid-cols-2 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
