@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { page } from "$app/stores";
 	import type { Player, Team } from "@prisma/client";
 	import Dialog from "../lib/components/Dialog.svelte";
 	import { enhance } from "$app/forms";
-  import type { ActionData } from './$types.js';
 	import { slide } from "svelte/transition";
 	import Card from "../lib/components/Card.svelte";
 
@@ -17,10 +17,9 @@
 
   export let teamData: Team[];
   export let playerData: Player[];
-  export let form: ActionData;
 
   const shouldCloseModal = () => {
-    if (form?.success) {
+    if ($page.form?.success) {
       teamCreateDialog?.close();
       teamEditDialog?.close();
     }
@@ -31,7 +30,7 @@
   const playerCount = (id: number): number => playerData.filter((player) => player.teamId === id).length;
   
   $: {
-    form
+    $page.form
     shouldCloseModal()
   }
 </script>
@@ -48,12 +47,12 @@
           name="name" 
           id="name" 
           placeholder="Enter Team Name" 
-          value={form?.name ?? ''}
+          value={$page.form?.name ?? ''}
           data-1p-ignore 
           class="w-full border rounded text-gray-900 py-1 px-2"
-          class:border-red-400={form?.missing}
+          class:border-red-400={$page.form?.missing}
         >
-        {#if form?.missing}<p class="text-red-500">The name field is required</p>{/if}
+        {#if $page.form?.missing}<p class="text-red-500">The name field is required</p>{/if}
       </label>
       <button 
         type="submit" 
@@ -74,12 +73,12 @@
           name="name" 
           id="name" 
           placeholder="Enter Team Name" 
-          value={form?.name ?? teamName}
+          value={$page.form?.name ?? teamName}
           data-1p-ignore 
           class="w-full border rounded text-gray-900 py-1 px-2"
-          class:border-red-400={form?.missing}
+          class:border-red-400={$page.form?.missing}
         >
-        {#if form?.missing}<p class="text-red-500">The name field is required</p>{/if}
+        {#if $page.form?.missing}<p class="text-red-500">The name field is required</p>{/if}
       </label>
       <button 
         type="submit" 

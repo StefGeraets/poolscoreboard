@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
 	import { enhance } from "$app/forms";
 	import Card from "$lib/components/Card.svelte";
 	import Dialog from "$lib/components/Dialog.svelte";
@@ -8,7 +9,6 @@
   
   export let matchData: Match[];
   export let playerData: Player[];
-  export let form: ActionData;
   let className: string = '';
   let working: boolean = false;
   export { className as class };

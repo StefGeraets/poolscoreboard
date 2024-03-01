@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { page } from "$app/stores";
 	import type { Player, Team } from "@prisma/client";
 	import Dialog from "../lib/components/Dialog.svelte";
 	import { enhance } from "$app/forms";
-  import type { ActionData } from './$types.js';
 	import { slide } from "svelte/transition";
 	import Card from "../lib/components/Card.svelte";
 
@@ -18,10 +18,9 @@
 
   export let playerData: Player[];
   export let teamData: Team[];
-  export let form: ActionData;
 
   const shouldCloseModal = () => {
-    if (form?.success) {
+    if ($page.form?.success) {
       playerCreateDialog?.close();
       playerEditDialog?.close();
     }
@@ -30,7 +29,7 @@
   const createButtonModal = () => playerCreateDialog.showModal()
   
   $: {
-    form
+    $page.form
     shouldCloseModal()
   }
 </script>
@@ -47,12 +46,12 @@
           name="name" 
           id="name" 
           placeholder="Enter Team Name" 
-          value={form?.name ?? ''}
+          value={$page.form?.name ?? ''}
           data-1p-ignore 
           class="w-full border rounded text-gray-900 py-1 px-2"
-          class:border-red-400={form?.missing}
+          class:border-red-400={$page.form?.missing}
         >
-        {#if form?.missing}<p class="text-red-500">The name field is required</p>{/if}
+        {#if $page.form?.missing}<p class="text-red-500">The name field is required</p>{/if}
       </label>
       <label for="team">
         <div class="text-blue-100">Select Team:</div>
@@ -81,12 +80,12 @@
           name="name" 
           id="name" 
           placeholder="Enter Player Name" 
-          value={form?.name ?? playerName}
+          value={$page.form?.name ?? playerName}
           data-1p-ignore 
           class="w-full border rounded text-gray-900 py-1 px-2"
-          class:border-red-400={form?.missing}
+          class:border-red-400={$page.form?.missing}
         >
-        {#if form?.missing}<p class="text-red-500">The name field is required</p>{/if}
+        {#if $page.form?.missing}<p class="text-red-500">The name field is required</p>{/if}
       </label>
       <label for="team">
         <div class="text-blue-100">Select Team:</div>

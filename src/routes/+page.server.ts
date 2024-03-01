@@ -5,9 +5,9 @@ import { matches, players, teams } from '../lib/db/fetches';
 
 export const load: PageServerLoad = async () => {
 	return { 
-		players: players(), 
-		teams: teams(), 
-		matches: matches()
+		players: await players(), 
+		teams: await teams(), 
+		matches: await matches()
 	};
 };
 
