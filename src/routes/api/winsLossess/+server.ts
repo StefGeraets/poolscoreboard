@@ -14,12 +14,18 @@ export const GET: RequestHandler = async () => {
       return false;
     })
 
+    const lossess = playedGames.length - player.wins;
+    const basicKd = Number((player.wins / lossess).toFixed(2));
+    const kd = basicKd === Infinity ? player.wins : basicKd;
+
+
     return {
       id: player.id,
       name: player.name,
       amountOfGames: playedGames.length,
       wins: player.wins,
-      lossess: playedGames.length - player.wins
+      lossess,
+      kd
     }
   })
 

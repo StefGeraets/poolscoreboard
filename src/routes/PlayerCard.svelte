@@ -27,11 +27,12 @@
   }
 
   const playersWinsLossess = (playerId: number) => {
-    const { wins, lossess } = $page.data.winsLossess.find((match) => match.id === playerId);
+    const { wins, lossess, kd } = $page.data.winsLossess.find((match) => match.id === playerId);
 
     return {
       wins,
       lossess,
+      kd
     }
   }
   
@@ -125,12 +126,15 @@
         <span class="font-bold">{player.name}</span>
       </div>
       <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
-      <div class="text-end flex gap-1 justify-end items-center">
-        <div class="text-xs">
-          <span class="text-red-600">{playersWinsLossess(player.id).lossess}</span>
-          \
+      <div class="text-end grid grid-cols-2 items-center">
+        <span class="text-xs text-gray-400">KD: {playersWinsLossess(player.id).kd}</span>
+        <div class="flex justify-end items-center gap-1">
+          <div class="text-xs">
+            <span class="text-red-600">{playersWinsLossess(player.id).lossess}</span>
+            \
+          </div>
+          <span class="text-green-500 font-bold">{player.wins}</span>
         </div>
-        <span class="text-green-500 font-bold">{player.wins}</span>
       </div>
       <!-- Remove edit and delete buttons, convert to player page where we can edit or delete the player -->
       <!-- <div 
