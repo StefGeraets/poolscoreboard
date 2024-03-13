@@ -125,13 +125,12 @@
         <span class="font-bold">{player.name}</span>
       </div>
       <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
-      <div class="text-end flex gap-2 justify-end items-center">
+      <div class="text-end flex gap-1 justify-end items-center">
         <div class="text-xs">
-          <span class="text-green-600">{playersWinsLossess(player.id).wins}</span>
-          /
           <span class="text-red-600">{playersWinsLossess(player.id).lossess}</span>
+          \
         </div>
-        {player.wins}
+        <span class="text-green-500 font-bold">{player.wins}</span>
       </div>
       <!-- Remove edit and delete buttons, convert to player page where we can edit or delete the player -->
       <!-- <div 
