@@ -28,7 +28,7 @@
 
   const playersWinsLossess = (playerId: number) => {
     const { wins, lossess } = $page.data.winsLossess.find((match) => match.id === playerId);
-    
+
     return {
       wins,
       lossess,
@@ -127,9 +127,9 @@
       <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
       <div class="text-end flex gap-2 justify-end items-center">
         <div class="text-xs">
-          <span class="text-red-600">{playersWinsLossess(player.id).wins}</span>
+          <span class="text-green-600">{playersWinsLossess(player.id).wins}</span>
           /
-          <span class="text-green-600">{playersWinsLossess(player.id).lossess}</span>
+          <span class="text-red-600">{playersWinsLossess(player.id).lossess}</span>
         </div>
         {player.wins}
       </div>
