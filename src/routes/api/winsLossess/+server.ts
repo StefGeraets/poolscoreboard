@@ -23,7 +23,5 @@ export const GET: RequestHandler = async () => {
     }
   })
 
-  console.log("Do stuff", matchesPerPlayer)
-
   return new Response(JSON.stringify({matchesPerPlayer}))
 }
