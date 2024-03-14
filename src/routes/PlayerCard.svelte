@@ -27,7 +27,7 @@
   }
 
   const playersWinsLossess = (playerId: number) => {
-    const { wins, lossess, kd } = $page.data.winsLossess.find((match) => match.id === playerId);
+    const { wins, lossess, kd } = $page.data.winsLossess.find((match: {id: number, wins: number, lossess: number, kd: number}) => match.id === playerId);
 
     return {
       wins,
