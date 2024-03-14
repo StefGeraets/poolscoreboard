@@ -2,8 +2,6 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  console.log(data.matches)
 </script>
 
 <header class="text-center bg-gray-950 text-blue-100 py-5">
