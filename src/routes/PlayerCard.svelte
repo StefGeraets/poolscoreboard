@@ -117,14 +117,14 @@
       class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
       class:border-b={index + 1 !== playerData.length}
     >
-      <div>
+      <a href={`/player/${player.name}`}>
         {index + 1}
         .
         {#if index + 1 === 1 && player.wins !== 0}
           🏆
         {/if}
         <span class="font-bold">{player.name}</span>
-      </div>
+      </a>
       <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
       <div class="text-end grid grid-cols-2 items-center">
         <span class="text-xs text-gray-400">KD: {playersWinsLossess(player.id).kd}</span>
