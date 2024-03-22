@@ -6,6 +6,17 @@
 	import { slide } from "svelte/transition";
 	import Card from "../lib/components/Card.svelte";
 
+  type WinLose = {
+    id: number; 
+    name: string; 
+    amountOfGames: number; 
+    wins: number; 
+    lossess: number; 
+    kd: number
+  }
+
+  type SortType = "byWins" | "byTotal" | "byKD" | "byLossess"
+
   let playerCreateDialog: HTMLDialogElement
   let playerEditDialog: HTMLDialogElement
 
@@ -18,6 +29,9 @@
 
   export let playerData: Player[];
   export let teamData: Team[];
+  export let winsLossess: WinLose[];
+
+  let playerSort: SortType = "byWins"
 
   const shouldCloseModal = () => {
     if ($page.form?.success) {
@@ -25,18 +39,50 @@
       playerEditDialog?.close();
     }
   }
-
-  const playersWinsLossess = (playerId: number) => {
-    const { wins, lossess, kd } = $page.data.winsLossess.find((match: {id: number, wins: number, lossess: number, kd: number}) => match.id === playerId);
-
-    return {
-      wins,
-      lossess,
-      kd
-    }
-  }
   
-  const createButtonModal = () => playerCreateDialog.showModal()
+  const createButtonModal = () => playerCreateDialog.showModal();
+
+  $: sortedPlayersData = (
+    playerData: Player[], 
+    winsLossess: WinLose[],
+    sortType: SortType
+    ): {
+      id: number; 
+      name: string; 
+      teamId: number; 
+      kd: number;
+      wins: number; 
+      lossess: number; 
+      totalGames: number;
+    }[] => {
+      const combinedPlayerData = playerData.map((player) => {
+        const playerStats = winsLossess.find((match) => match.id === player.id);
+
+        return {
+          id: player.id,
+          name: player.name,
+          teamId: player.teamId,
+          kd: playerStats!.kd,
+          wins: player.wins,
+          lossess: playerStats!.lossess,
+          totalGames: playerStats!.amountOfGames,
+        }
+      })
+
+      if (sortType === "byKD") {
+        return combinedPlayerData.sort((p1, p2) => {return p1.kd < p2.kd ? 1 : -1})
+      }
+
+      if (sortType === "byTotal") {
+        return combinedPlayerData.sort((p1, p2) => {return p1.totalGames < p2.totalGames ? 1 : -1})
+      }
+
+      if (sortType === "byLossess") {
+        return combinedPlayerData.sort((p1, p2) => {return p1.lossess < p2.lossess ? 1 : -1})
+      }
+
+      return combinedPlayerData;
+  }
   
   $: {
     $page.form
@@ -46,6 +92,37 @@
 
 <Card span="{2}" showModal={createButtonModal} class={className || ''}>
   <svelte:fragment slot="title">Players</svelte:fragment>
+
+  <div class="grid grid-cols-4 items-center overflow-hidden rounded bg-gray-950 border border-gray-800 text-gray-500 mb-2">
+    <button 
+      on:click={() => playerSort = "byWins"} 
+      disabled={playerSort === "byWins"}
+      class="py-1 uppercase tracking-wide text-sm disabled:text-blue-300  disabled:bg-gray-800"
+    >
+      Wins
+    </button>
+    <button 
+      on:click={() => playerSort = "byLossess"} 
+      disabled={playerSort === "byLossess"}
+      class="border-l border-l-gray-900 py-1 uppercase tracking-wide text-sm disabled:text-blue-300  disabled:bg-gray-800"
+    >
+      Lossess
+    </button>
+    <button 
+      on:click={() => playerSort = "byKD"} 
+      disabled={playerSort === "byKD"}
+      class="border-l border-l-gray-900 py-1 uppercase tracking-wide text-sm disabled:text-blue-300  disabled:bg-gray-800"
+    >
+      KD
+    </button>
+    <button 
+      on:click={() => playerSort = "byTotal"} 
+      disabled={playerSort === "byTotal"}
+      class="border-l border-l-gray-900 py-1 uppercase tracking-wide text-sm disabled:text-blue-300  disabled:bg-gray-800"
+    >
+      Total
+    </button>
+  </div>
 
   <Dialog bind:dialog={playerCreateDialog}>
     <form method="POST" action="?/addPlayer" use:enhance class="flex flex-col gap-4">
@@ -111,7 +188,7 @@
     </form>
   </Dialog>
 
-  {#each playerData as player, index }
+  {#each sortedPlayersData(playerData, winsLossess, playerSort) as player, index }
     <div 
       transition:slide
       class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
@@ -127,10 +204,10 @@
       </a>
       <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
       <div class="text-end grid grid-cols-2 items-center">
-        <span class="text-xs text-gray-400">KD: {playersWinsLossess(player.id).kd}</span>
+        <span class="text-xs text-gray-400">KD: {player.kd}</span>
         <div class="flex justify-end items-center gap-1">
           <div class="text-xs">
-            <span class="text-red-600">{playersWinsLossess(player.id).lossess}</span>
+            <span class="text-red-600">{player.lossess}</span>
             \
           </div>
           <span class="text-green-500 font-bold">{player.wins}</span>

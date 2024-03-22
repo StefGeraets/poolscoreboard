@@ -18,7 +18,7 @@
 </header>
 
 <div class="container mx-auto grid lg:grid-cols-7 md:grid-cols-3 grid-cols-1 gap-4">
-  <PlayerCard playerData={data.players} teamData={data.teams} class="order-2 md:order-1"/>
+  <PlayerCard playerData={data.players} teamData={data.teams} winsLossess={data.winsLossess} class="order-2 md:order-1"/>
   <MatchesCard playerData={data.players} matchData={data.matches} class="order-1 md:order-2"/>
   <TeamsCard teamData={data.teams} playerData={data.players} class="order-3 md:order-3"/>
 </div>
