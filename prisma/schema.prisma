@@ -40,4 +40,5 @@ model Match {
   createdAt DateTime  @default(now())
   winnerId  Int
   winner    Player    @relation("winner", fields: [winnerId], references: [id])
+  method    String    @default("fair")
 }

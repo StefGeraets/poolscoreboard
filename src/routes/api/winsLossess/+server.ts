@@ -18,7 +18,6 @@ export const GET: RequestHandler = async () => {
     const basicKd = Number((player.wins / lossess).toFixed(2));
     const kd = basicKd === Infinity ? player.wins : basicKd;
 
-
     return {
       id: player.id,
       name: player.name,

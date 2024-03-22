@@ -106,6 +106,7 @@ export const actions: Actions = {
 		const player1Id = Number(data.get('player1'));
 		const player2Id = Number(data.get('player2'));
 		const winnerId = Number(data.get('winner'));
+		const method = String(data.get("method"));
 
 		const players = await DB.player.findMany({ 
 			where: {id: { in: [player1Id, player2Id]}}, 
@@ -121,12 +122,12 @@ export const actions: Actions = {
 			}
 		})
 
-		if (!winningPlayer) {
+		if (!winningPlayer || !method) {
 			return fail(400, { winnerId, notFound: true });
 		}
 
 		await DB.match.create({
-			data: { player1Id, player2Id, winnerId }
+			data: { player1Id, player2Id, winnerId, method }
 		});
 
 		await DB.player.update({
