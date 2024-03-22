@@ -43,6 +43,8 @@
     }
   }
 
+  let winMethod: "fair" | "8-ball" = "fair";
+
   $: winnerPool = selectedPlayers(selectedPlayer1, selectedPlayer2)
 </script>
 
@@ -59,7 +61,7 @@
     >
       <div class="grid grid-cols-2 gap-4 w-full">
         <label for="player1">
-          <div class="text-blue-100">Select Challenger:</div>
+          <div class="text-blue-100 mb-1">Select Challenger:</div>
           <select 
             name="player1" 
             id="player1" 
@@ -74,7 +76,7 @@
           </select>
         </label>
         <label for="player2">
-          <div class="text-blue-100">Select Opponent:</div>
+          <div class="text-blue-100 mb-1">Select Opponent:</div>
           <select
             name="player2" 
             id="player2" 
@@ -91,7 +93,7 @@
       </div>
 
       <label for="winner" class="w-full">
-        <div class="text-blue-100 text-lg font-bold">Who won?</div>
+        <div class="text-blue-100 text-lg font-bold mb-1">Who won?</div>
         <select 
           name="winner" 
           id="winner" 
@@ -105,10 +107,18 @@
           {/each}
         </select>
       </label>
+      <label for="method" class="w-full mb-4">
+        <div class="text-blue-100 text-lg font-bold mb-1">Which method did you win?</div>
+        <input type="hidden" name="method" id="method" value="{winMethod}">
+        <div class="grid grid-cols-2 gap-4">
+          <button on:click={() => winMethod = "fair"} disabled={winMethod === "fair"} class="text-lg border border-gray-700 bg-gray-800 disabled:bg-blue-800">⚔️</button>
+          <button on:click={() => winMethod = "8-ball"} disabled={winMethod === "8-ball"} class="text-lg border border-gray-700 bg-gray-800 disabled:bg-blue-800">🎱</button>
+        </div>
+      </label>
       <button 
         type="submit" 
         disabled={working}
-        class="block text-blue-100 text-center font-medium uppercase py-1 px-2 rounded bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-blue-400 disabled:bg-gray-700 disabled:cursor-wait">
+        class="block text-blue-100 text-center font-medium uppercase py-2 px-2 rounded bg-green-800 border border-green-700 hover:bg-gray-700 hover:text-blue-400 disabled:bg-gray-700 disabled:cursor-wait">
           {#if !working}
             Save
           {:else}
