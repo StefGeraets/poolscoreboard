@@ -195,7 +195,7 @@
       class:border-b={index + 1 !== playerData.length}
     >
       <a href={`/player/${player.name}`}>
-        {index + 1}
+        {index + 4}
         .
         {#if index + 1 === 1 && player.wins !== 0}
           🏆
