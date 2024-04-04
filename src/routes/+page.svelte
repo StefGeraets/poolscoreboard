@@ -27,7 +27,7 @@
   <h1 class="font-black">Pool Scoreboard</h1>
 </header>
 
-<div class="grid grid-cols-3 items-end gap-2 px-4 h-[164px]">
+<div class="grid grid-cols-3 items-end gap-2 px-4 h-[164px] lg:max-w-2xl mx-auto">
   {#if ready}
     <div>
       <h3 in:fly={{ delay: 1250, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black uppercase pb-3">{secondPlayer.name}</h3>
