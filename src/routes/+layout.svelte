@@ -10,7 +10,7 @@
 <main class="bg-gray-950">
 	<slot />
 
-	<footer class="fixed bottom-0 w-full rounded-t-2xl bg-gray-900/60 backdrop-blur-md">
+	<footer class="fixed bottom-0 w-full rounded-t-2xl bg-gray-950/60 backdrop-blur-md">
 		<ul class="flex items-center justify-around">
 			<li class="p-4">
 				<a href="/" class="w-6 h-6">
@@ -57,7 +57,7 @@
 			<li class="relative w-10">
 				<a
 					href="#"
-					class="absolute flex items-center justify-center p-4 text-blue-700 bg-gray-900 rounded-full backdrop-blur-lg -inset-x-4 -top-11"
+					class="absolute flex items-center justify-center p-4 text-blue-700 rounded-full bg-gray-950 backdrop-blur-lg -inset-x-4 -top-11"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

@@ -5,8 +5,18 @@
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { expoInOut, quadOut } from 'svelte/easing';
+	import type { Player } from '@prisma/client';
   
   export let data;
+
+  type WinLose = {
+    id: number; 
+    name: string; 
+    amountOfGames: number; 
+    wins: number; 
+    lossess: number; 
+    kd: number
+  }
 
   const totalScore = (teams: {score: number}[]) => {
     return teams.reduce((sum, team) => {
@@ -14,47 +24,98 @@
     }, 0)
   }
   $: total = totalScore(data.teams)
-  $: firstPlayer = data.players.slice(0, 1)[0]
-  $: secondPlayer = data.players.slice(1, 2)[0]
-  $: thirdPlayer = data.players.slice(2, 3)[0]
+  $: firstPlayer = combinePlayer(data.players.slice(0, 1)[0])
+  $: secondPlayer = combinePlayer(data.players.slice(1, 2)[0])
+  $: thirdPlayer = combinePlayer(data.players.slice(2, 3)[0])
 
   let ready: boolean = false;
 
   onMount(() => ready = true)
+
+  const combinePlayer = (player: Player) => {
+    const playerStats = data.winsLossess.find((match: WinLose) => match.id === player.id);
+
+    return {
+      id: player.id,
+      name: player.name,
+      teamId: player.teamId,
+      kd: playerStats!.kd,
+      wins: player.wins,
+      lossess: playerStats!.lossess,
+      totalGames: playerStats!.amountOfGames,
+    }
+  }
+  
 </script>
 
 <header class="text-center text-xl bg-gray-950 text-gray-600 py-4">
   <h1 class="font-black">Pool Scoreboard</h1>
 </header>
 
-<div class="grid grid-cols-3 items-end gap-2 px-4 h-[164px] lg:max-w-2xl mx-auto">
+<div class="grid grid-cols-3 items-end gap-2 px-4 h-[176px] lg:max-w-2xl mx-auto">
   {#if ready}
     <div>
-      <h3 in:fly={{ delay: 1250, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black uppercase pb-3">{secondPlayer.name}</h3>
+      <h3 in:fly={{ delay: 1250, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black flex flex-col leading-none uppercase pb-3">
+        <span>{secondPlayer.name}</span>
+        <span class="text-gray-50/50 text-sm font-normal normal-case">{data.teams.find((team) => secondPlayer.teamId === team.id)?.name}</span>
+      </h3>
       <div in:slide={{ delay: 600, duration: 750, easing: quadOut }} class="h-24 rounded-t-md silver-bar relative">
-        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2">Stats</div>
+        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
+          <div class="flex justify-between text-xs">
+            <span>W / L:</span><span class="font-bold text-white"><span class="text-green-400">{secondPlayer.wins}</span> / <span class="text-red-400">{secondPlayer.lossess}</span></span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>KD:</span><span class="font-bold text-white">{secondPlayer.kd}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>Total:</span><span class="font-bold text-white">{secondPlayer.totalGames}</span>
+          </div>
+        </div>      
       </div>  
     </div>
     <div>
-      <h3 in:fly={{ delay: 1750, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black uppercase pb-3">{firstPlayer.name}</h3>
+      <h3 in:fly={{ delay: 1750, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black flex flex-col leading-none uppercase pb-3">
+        <span>{firstPlayer.name}</span>
+        <span class="text-gray-50/50 text-sm font-normal normal-case">{data.teams.find((team) => firstPlayer.teamId === team.id)?.name}</span>
+      </h3>
       <div in:slide={{ delay: 1100, duration: 750, easing: quadOut }} class="h-32 rounded-t-md gold-bar relative">
-        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2">Stats</div>
+        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
+          <div class="flex justify-between text-xs">
+            <span>W / L:</span><span class="font-bold text-white"><span class="text-green-400">{firstPlayer.wins}</span> / <span class="text-red-400">{firstPlayer.lossess}</span></span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>KD:</span><span class="font-bold text-white">{firstPlayer.kd}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>Total:</span><span class="font-bold text-white">{firstPlayer.totalGames}</span>
+          </div>
+        </div>
       </div>
     </div>
     <div>
-      <h3 in:fly={{ delay: 750, y: 15, opacity: 0, easing: expoInOut }} class="text-center font-black uppercase pb-3">{thirdPlayer.name}</h3>
+      <h3 in:fly={{ delay: 750, y: 15, opacity: 0, easing: expoInOut }} class="text-center flex flex-col font-black leading-none uppercase pb-3">
+        <span>{thirdPlayer.name}</span>
+        <span class="text-gray-50/50 text-sm font-normal normal-case">{data.teams.find((team) => thirdPlayer.teamId === team.id)?.name}</span>
+      </h3>
       <div in:slide={{ delay: 100, duration: 750, easing: quadOut }} class="h-16 rounded-t-md copper-bar relative">
-        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2">Stats</div>
+        <div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
+          <div class="flex justify-between text-xs">
+            <span>W / L:</span><span class="font-bold text-white"><span class="text-green-400">{thirdPlayer.wins}</span> / <span class="text-red-400">{thirdPlayer.lossess}</span></span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>KD:</span><span class="font-bold text-white">{thirdPlayer.kd}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span>Total:</span><span class="font-bold text-white">{thirdPlayer.totalGames}</span>
+          </div>
+        </div>
       </div>
     </div>
   {/if}
 </div>
 
-<div class="container mx-auto grid lg:grid-cols-7 md:grid-cols-3 grid-cols-1 gap-4">
-  <PlayerCard playerData={data.players.slice(3, -1)} teamData={data.teams} winsLossess={data.winsLossess} class="order-1 md:order-1"/>
-  <MatchesCard playerData={data.players} matchData={data.matches} class="order-2 md:order-2"/>
-  <TeamsCard teamData={data.teams} playerData={data.players} class="order-3 md:order-3"/>
-</div>
+<PlayerCard playerData={data.players.slice(3, -1)} teamData={data.teams} winsLossess={data.winsLossess} />
+
 <!-- <div class="fixed bottom-0 inset-x-0 h-16 flex justify-between items-end">
   {#each data.teams.slice(0, 2) as team, i }
     <div 

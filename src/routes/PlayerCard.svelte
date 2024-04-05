@@ -3,8 +3,6 @@
 	import type { Player, Team } from "@prisma/client";
 	import Dialog from "../lib/components/Dialog.svelte";
 	import { enhance } from "$app/forms";
-	import { slide } from "svelte/transition";
-	import Card from "../lib/components/Card.svelte";
 
   type WinLose = {
     id: number; 
@@ -24,9 +22,6 @@
   let playerName: string;
   let teamId: number;
 
-  let className: string = '';
-  export { className as class };
-
   export let playerData: Player[];
   export let teamData: Team[];
   export let winsLossess: WinLose[];
@@ -40,7 +35,7 @@
     }
   }
   
-  const createButtonModal = () => playerCreateDialog.showModal();
+  // const createButtonModal = () => playerCreateDialog.showModal();
 
   $: sortedPlayersData = (
     playerData: Player[], 
@@ -90,10 +85,8 @@
   }
 </script>
 
-<Card span="{2}" showModal={createButtonModal} class={className || ''}>
-  <svelte:fragment slot="title">Players</svelte:fragment>
-
-  <div class="grid grid-cols-4 items-center overflow-hidden rounded bg-gray-950 border border-gray-800 text-gray-500 mb-2">
+<div>
+  <!-- <div class="grid grid-cols-4 items-center overflow-hidden rounded bg-gray-950 border border-gray-800 text-gray-500 mb-2">
     <button 
       on:click={() => playerSort = "byWins"} 
       disabled={playerSort === "byWins"}
@@ -122,7 +115,7 @@
     >
       Total
     </button>
-  </div>
+  </div> -->
 
   <Dialog bind:dialog={playerCreateDialog}>
     <form method="POST" action="?/addPlayer" use:enhance class="flex flex-col gap-4">
@@ -189,29 +182,25 @@
   </Dialog>
 
   {#each sortedPlayersData(playerData, winsLossess, playerSort) as player, index }
-    <div 
-      transition:slide
-      class="grid grid-cols-3 items-center w-full border-gray-800 py-2 group relative overflow-hidden"
-      class:border-b={index + 1 !== playerData.length}
+    <a href={`/player/${player.name}`} 
+      class="grid grid-cols-2 items-center w-vw mx-2 mb-2 bg-gray-900 rounded-lg px-4 py-2"
     >
-      <a href={`/player/${player.name}`}>
-        {index + 4}
-        .
-        {#if index + 1 === 1 && player.wins !== 0}
-          🏆
-        {/if}
-        <span class="font-bold">{player.name}</span>
-      </a>
-      <div class="text-center text-sm">{teamData.find((team) => player.teamId === team.id)?.name}</div>
-      <div class="text-end grid grid-cols-2 items-center">
-        <span class="text-xs text-gray-400">KD: {player.kd}</span>
+      <div class="flex items-center">
+        <div class="w-10">{index + 4}. </div>
+        <div class="flex flex-col items-start">
+          <span class="font-bold">{player.name}</span>
+          <div class="text-sm text-gray-400">{teamData.find((team) => player.teamId === team.id)?.name}</div>
+        </div>
+      </div>
+      <div class="text-end flex flex-col items-end">
         <div class="flex justify-end items-center gap-1">
-          <div class="text-xs">
+          <div class="text-sm">
             <span class="text-red-600">{player.lossess}</span>
             \
           </div>
           <span class="text-green-500 font-bold">{player.wins}</span>
         </div>
+        <span class="text-xs text-gray-400">KD: {player.kd}</span>
       </div>
       <!-- Remove edit and delete buttons, convert to player page where we can edit or delete the player -->
       <!-- <div 
@@ -238,6 +227,6 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg></button>
         </form>
       </div> -->
-    </div>
+    </a>
   {/each}
-</Card>
+</div>
