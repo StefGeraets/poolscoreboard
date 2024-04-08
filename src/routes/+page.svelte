@@ -1,13 +1,17 @@
 <script lang="ts">
-	import TeamsCard from './TeamsCard.svelte';
 	import PlayerCard from './PlayerCard.svelte';
-	import MatchesCard from './MatchesCard.svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { expoInOut, quadOut } from 'svelte/easing';
 	import type { Player } from '@prisma/client';
   
+  type FilterOptions = 'wins' | 'lossess' | 'winrate' | 'total';
   export let data;
+  let currentFilter: FilterOptions = 'wins'
+  let ready: boolean = false;
+  let filterOpen: boolean = false;
+
+  const filterOptions: FilterOptions[] = ['wins' , 'lossess' , 'winrate' , 'total' ];
 
   type WinLose = {
     id: number; 
@@ -17,6 +21,7 @@
     lossess: number; 
     kd: number
   }
+
 
   const totalScore = (teams: {score: number}[]) => {
     return teams.reduce((sum, team) => {
@@ -28,7 +33,6 @@
   $: secondPlayer = combinePlayer(data.players.slice(1, 2)[0])
   $: thirdPlayer = combinePlayer(data.players.slice(2, 3)[0])
 
-  let ready: boolean = false;
 
   onMount(() => ready = true)
 
@@ -45,12 +49,44 @@
       totalGames: playerStats!.amountOfGames,
     }
   }
+
+  const openFilter = (): void => {
+    filterOpen = !filterOpen
+  }
   
 </script>
 
-<header class="text-center text-xl bg-gray-950 text-gray-600 py-4">
-  <h1 class="font-black">Pool Scoreboard</h1>
+<header class="grid grid-cols-4 items-center text-xl bg-gray-950 py-4 mb-4 mx-2">
+  <div>
+    back
+  </div>
+  <h1 class="text-center font-black col-span-2 text-gray-600 ">Pool Scoreboard</h1>
+  <div class="self-center">
+    <button 
+      class="flex items-center relative gap-1 uppercase bg-gray-900 text-gray-300 text-xs tracking-wide py-1 px-2 rounded-t w-full"
+      class:rounded-b={!filterOpen}
+      on:click|preventDefault={openFilter}
+    >
+      {currentFilter}
+      <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 ml-auto transition-transform" class:-rotate-180={filterOpen}><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
+      {#if filterOpen}
+        <div class="absolute flex flex-col items-start z-20 bg-gray-900 top-full w-full right-0 border-t border-t-gray-950 rounded-b" transition:slide>
+          {#each filterOptions as filter}
+            <button class="px-2 py-1.5 flex gap-2 items-center capitalize" class:text-gray-500={currentFilter === filter} on:click|preventDefault={() => currentFilter = filter}>
+              <span 
+                class="w-1 h-1 bg-blue-300 rounded-full block indicator opacity-0"
+                class:opacity-100={currentFilter === filter}
+              ></span>
+              {filter}
+            </button>
+          {/each}
+        </div>
+      {/if}
+    </button>
+  </div>
 </header>
+
+
 
 <div class="grid grid-cols-3 items-end gap-2 px-4 h-[176px] lg:max-w-2xl mx-auto">
   {#if ready}
@@ -68,7 +104,7 @@
             <span>KD:</span><span class="font-bold text-white">{secondPlayer.kd}</span>
           </div>
           <div class="flex justify-between text-xs">
-            <span>Total:</span><span class="font-bold text-white">{secondPlayer.totalGames}</span>
+            <span>Matches:</span><span class="font-bold text-white">{secondPlayer.totalGames}</span>
           </div>
         </div>      
       </div>  
@@ -87,7 +123,7 @@
             <span>KD:</span><span class="font-bold text-white">{firstPlayer.kd}</span>
           </div>
           <div class="flex justify-between text-xs">
-            <span>Total:</span><span class="font-bold text-white">{firstPlayer.totalGames}</span>
+            <span>Matches:</span><span class="font-bold text-white">{firstPlayer.totalGames}</span>
           </div>
         </div>
       </div>
@@ -106,7 +142,7 @@
             <span>KD:</span><span class="font-bold text-white">{thirdPlayer.kd}</span>
           </div>
           <div class="flex justify-between text-xs">
-            <span>Total:</span><span class="font-bold text-white">{thirdPlayer.totalGames}</span>
+            <span>Matches:</span><span class="font-bold text-white">{thirdPlayer.totalGames}</span>
           </div>
         </div>
       </div>
@@ -185,5 +221,9 @@
     background: transparent;
     border-radius: 10px;
     box-shadow: 0 0 15px 10px hsl(30, 100%, 84%, 15%);
+  }
+
+  .indicator {
+    box-shadow: 0 0 6px 0 rgb(147 197 253);
   }
 </style>
