@@ -3,12 +3,12 @@ import DB from '../lib';
 import type { PageServerLoad } from './$types';
 import { matches, players, teams } from '../lib/db/fetches';
 
-export const load: PageServerLoad = async ({fetch}) => {
-	const winsLossess = await fetch(`/api/winsLossess`).then((r) => r.json())
+export const load: PageServerLoad = async ({ fetch }) => {
+	const winsLossess = await fetch(`/api/winsLossess`).then((r) => r.json());
 
-	return { 
-		players: await players(), 
-		teams: await teams(), 
+	return {
+		players: await players(),
+		teams: await teams(),
 		matches: await matches(),
 		winsLossess: winsLossess.matchesPerPlayer
 	};
@@ -27,7 +27,7 @@ export const actions: Actions = {
 			data: { name: name as string }
 		});
 
-		return { success: true }
+		return { success: true };
 	},
 	deleteTeam: async ({ request }) => {
 		const data = await request.formData();
@@ -49,7 +49,7 @@ export const actions: Actions = {
 			data: { name }
 		});
 
-		return { success: true }
+		return { success: true };
 	},
 
 	addPlayer: async ({ request }) => {
@@ -61,16 +61,18 @@ export const actions: Actions = {
 			return fail(400, { name, missing: true });
 		}
 
-		const strippedName = name.replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      ''
-    ).trim();
+		const strippedName = name
+			.replace(
+				/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+				''
+			)
+			.trim();
 
 		await DB.player.create({
 			data: { name: strippedName, teamId }
 		});
 
-		return { success: true }
+		return { success: true };
 	},
 	deletePlayer: async ({ request }) => {
 		const data = await request.formData();
@@ -88,17 +90,19 @@ export const actions: Actions = {
 			return fail(400, { name, missing: true });
 		}
 
-		const strippedName = name.replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      ''
-    ).trim();
-		
+		const strippedName = name
+			.replace(
+				/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+				''
+			)
+			.trim();
+
 		await DB.player.update({
 			where: { id },
 			data: { name: strippedName, teamId }
 		});
 
-		return { success: true }
+		return { success: true };
 	},
 
 	addMatch: async ({ request }) => {
@@ -106,21 +110,21 @@ export const actions: Actions = {
 		const player1Id = Number(data.get('player1'));
 		const player2Id = Number(data.get('player2'));
 		const winnerId = Number(data.get('winner'));
-		const method = String(data.get("method"));
+		const method = String(data.get('method'));
 
-		const players = await DB.player.findMany({ 
-			where: {id: { in: [player1Id, player2Id]}}, 
+		const players = await DB.player.findMany({
+			where: { id: { in: [player1Id, player2Id] } },
 			include: {
 				team: true
 			}
-		})
+		});
 
-		const winningPlayer = await DB.player.findFirst({ 
-			where: {id: winnerId}, 
+		const winningPlayer = await DB.player.findFirst({
+			where: { id: winnerId },
 			include: {
 				team: true
 			}
-		})
+		});
 
 		if (!winningPlayer || !method) {
 			return fail(400, { winnerId, notFound: true });
@@ -135,17 +139,17 @@ export const actions: Actions = {
 			data: {
 				wins: winningPlayer?.wins + 1
 			}
-		})
+		});
 
-		if(players[0].teamId !== players[1].teamId) {
+		if (players[0].teamId !== players[1].teamId) {
 			await DB.team.update({
-				where: {id: winningPlayer.team.id },
+				where: { id: winningPlayer.team.id },
 				data: {
 					score: winningPlayer.team.score + 1
 				}
-			})
+			});
 		}
 
-		return { success: true }
+		return { success: true };
 	}
 };
