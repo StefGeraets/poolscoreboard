@@ -1,15 +1,13 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import DB from '../lib';
 import type { PageServerLoad } from './$types';
-import { matches, players, teams } from '../lib/db/fetches';
+import { players } from '../lib/db/fetches';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const winsLossess = await fetch(`/api/winsLossess`).then((r) => r.json());
 
 	return {
 		players: await players(),
-		teams: await teams(),
-		matches: await matches(),
 		winsLossess: winsLossess.matchesPerPlayer
 	};
 };
