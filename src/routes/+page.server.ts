@@ -2,6 +2,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import DB from '../lib';
 import type { PageServerLoad } from './$types';
 import { players } from '../lib/db/fetches';
+import type { Player } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const winsLossess = await fetch(`/api/winsLossess`).then((r) => r.json());
@@ -110,43 +111,124 @@ export const actions: Actions = {
 		const winnerId = Number(data.get('winner'));
 		const method = String(data.get('method'));
 
-		const players = await DB.player.findMany({
-			where: { id: { in: [player1Id, player2Id] } },
-			include: {
-				team: true
+		const BASE_WIN_SCORE = 10;
+		const BASE_LOSE_SCORE = 0;
+		const allPlayers = await DB.player.findMany({
+			orderBy: {
+				s1_score: 'desc'
 			}
 		});
 
-		const winningPlayer = await DB.player.findFirst({
-			where: { id: winnerId },
-			include: {
-				team: true
-			}
+		const gamePlayers = await DB.player.findMany({
+			where: { id: { in: [player1Id, player2Id] } }
 		});
 
-		if (!winningPlayer || !method) {
+		const winningPlayer = gamePlayers.find((p) => p.id === winnerId);
+		const losingPlayer = gamePlayers.find((p) => p.id !== winnerId);
+
+		// const winningPlayer = await DB.player.findFirst({
+		// 	where: { id: winnerId },
+		// 	include: {
+		// 		team: true
+		// 	}
+		// });
+
+		if (!winningPlayer || !method || !losingPlayer) {
 			return fail(400, { winnerId, notFound: true });
 		}
 
+		// create match
 		await DB.match.create({
 			data: { player1Id, player2Id, winnerId, method }
 		});
 
+		const streakData = (player: Player, isWinning: boolean = false) => {
+			let s1_onAStreak: boolean = false;
+			let s1_currentStreak: number = 0;
+			const s1_longestStreak: number =
+				player.s1_longestStreak > player.s1_currentStreak
+					? player.s1_longestStreak
+					: player.s1_currentStreak;
+
+			if (isWinning) {
+				s1_onAStreak = true;
+				s1_currentStreak = player.s1_currentStreak + 1;
+			}
+
+			return {
+				s1_onAStreak,
+				s1_currentStreak,
+				s1_longestStreak
+			};
+		};
+
+		const getScore = (isWinning: boolean = false) => {
+			let s1_score: number = 0;
+
+			const losingIndex: number =
+				winningPlayer.s1_ranked && losingPlayer.s1_ranked
+					? allPlayers.findIndex((p) => (p.id = losingPlayer.id)) + 1
+					: 0;
+			const winningIndex: number =
+				winningPlayer.s1_ranked && losingPlayer.s1_ranked
+					? allPlayers.findIndex((p) => (p.id = winningPlayer.id)) + 1
+					: 0;
+
+			// Player is winning
+			if (isWinning) {
+				// losing player is not ranked
+				if (!losingPlayer.s1_ranked) {
+					s1_score = winningPlayer.s1_score + 10;
+				} else {
+					// Score calculation
+					const score = BASE_WIN_SCORE + (winningIndex - losingIndex);
+					s1_score = winningPlayer.s1_score + Math.min(Math.max(5, score), 15);
+				}
+			} else {
+				// Player is loser
+				const score = losingIndex - winningIndex;
+				s1_score = losingPlayer.s1_score + Math.min(Math.max(-5, score), BASE_LOSE_SCORE);
+			}
+
+			return {
+				s1_score,
+				s1_ranked: true
+			};
+		};
+
+		const winScore = getScore(true);
+		const loseScore = getScore();
+
+		// update winner
 		await DB.player.update({
 			where: { id: winningPlayer.id },
 			data: {
-				wins: winningPlayer?.wins + 1
+				...streakData(winningPlayer, true),
+				...winScore,
+				s1_wins: winningPlayer.s1_wins + 1,
+				s1_totalGames: winningPlayer.s1_totalGames + 1
 			}
 		});
 
-		if (players[0].teamId !== players[1].teamId) {
-			await DB.team.update({
-				where: { id: winningPlayer.team.id },
-				data: {
-					score: winningPlayer.team.score + 1
-				}
-			});
-		}
+		// update loser
+		await DB.player.update({
+			where: { id: losingPlayer.id },
+			data: {
+				...streakData(losingPlayer),
+				...loseScore,
+				s1_lossess: winningPlayer.s1_lossess + 1,
+				s1_totalGames: winningPlayer.s1_totalGames + 1
+			}
+		});
+
+		// if (players[0].teamId !== players[1].teamId) {
+		// 	await DB.team.update({
+		// 		where: { id: winningPlayer.team.id },
+		// 		data: {
+		// 			score: winningPlayer.team.score + 1
+		// 		}
+		// 	});
+		// }
 
 		return { success: true };
 	}

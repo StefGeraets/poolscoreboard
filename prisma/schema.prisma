@@ -30,13 +30,16 @@ model Player {
   winner            Match[] @relation("winner")
   wins              Int     @default(0)
   s1_score          Int     @default(0)
-  s1_prevScore      Int     @default(0)
+  s1_dayScore       Int     @default(0)
+  s1_weekScore      Int     @default(0)
+  s1_monthScore     Int     @default(0)
   s1_ranked         Boolean @default(false)
   s1_wins           Int     @default(0)
   s1_lossess        Int     @default(0)
   s1_totalGames     Int     @default(0)
   s1_onAStreak      Boolean @default(false)
   s1_currentStreak  Int     @default(0)
+  s1_longestStreak  Int     @default(0)
 }
 
 model Match {
