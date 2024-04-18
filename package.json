@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^5.9.1"
+		"@prisma/client": "^5.9.1",
+		"@vercel/speed-insights": "^1.0.10"
 	}
 }
