@@ -5,7 +5,7 @@
 	import { quadIn, quadOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import FormWrapper from './FormWrapper.svelte';
-	import { IconLoader2 } from '@tabler/icons-svelte';
+	import Icon from './Icon.svelte';
 
 	export let formOpen: boolean = false;
 	export let toggleForm: () => void;
@@ -124,7 +124,7 @@
 			{#if !working}
 				Save
 			{:else}
-				<IconLoader2 class="mx-auto animate-spin" />
+				<Icon name="loader" />
 			{/if}
 		</button>
 	</form>

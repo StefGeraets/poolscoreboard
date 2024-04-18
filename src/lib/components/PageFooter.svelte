@@ -1,12 +1,6 @@
 <script lang="ts">
-	import {
-		IconDotsVertical,
-		IconPlus,
-		IconSportBillard,
-		IconTrophy,
-		IconUser
-	} from '@tabler/icons-svelte';
 	import { slide } from 'svelte/transition';
+	import Icon from './Icon.svelte';
 
 	export let toggleMatchForm: () => void;
 
@@ -36,12 +30,12 @@
 	<ul class="flex items-center justify-around">
 		<li class="p-4">
 			<a href="/" class="w-6 h-6 disabled:text-gray-600">
-				<IconTrophy />
+				<Icon name="trophy" />
 			</a>
 		</li>
 		<li class="p-4">
 			<a href="/matches" class="w-6 h-6 disabled:text-gray-600">
-				<IconSportBillard />
+				<Icon name="8ball" />
 			</a>
 		</li>
 		<li class="relative w-10">
@@ -49,12 +43,12 @@
 				class="absolute flex items-center justify-center p-4 text-blue-700 rounded-full bg-gray-950 backdrop-blur-lg -inset-x-4 -top-11"
 				on:click={toggleMatchForm}
 			>
-				<IconPlus size={40} />
+				<Icon size={40} name="plus" />
 			</button>
 		</li>
 		<li class="p-4">
 			<a href="/players" class="w-6 h-6 disabled:text-gray-600">
-				<IconUser />
+				<Icon name="user" />
 			</a>
 		</li>
 		<li class="relative p-4">
@@ -78,7 +72,7 @@
 				class="w-6 h-6 transition-transform"
 				class:text-blue-800={extraMenuOpen}
 			>
-				<IconDotsVertical />
+				<Icon name="dots" />
 			</button>
 		</li>
 	</ul>

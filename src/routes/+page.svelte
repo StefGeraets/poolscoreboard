@@ -4,6 +4,7 @@
 	import { fly, slide } from 'svelte/transition';
 	import { expoInOut, quadOut } from 'svelte/easing';
 	import type { Player, Team } from '@prisma/client';
+	import Icon from '../lib/components/Icon.svelte';
 
 	type FilterOptions = 'score' | 'wins' | 'lossess' | 'total';
 	export let data;
@@ -66,8 +67,10 @@
 				stroke-linejoin="round"
 				class="w-3 h-3 ml-auto transition-transform"
 				class:-rotate-180={filterOpen}
-				><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 9l6 6l6 -6" /></svg
 			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+				<path d="M6 9l6 6l6 -6" />
+			</svg>
 			{#if filterOpen}
 				<div
 					class="absolute right-0 z-20 flex flex-col items-start w-full bg-gray-900 border-t rounded-b top-full border-t-gray-950"

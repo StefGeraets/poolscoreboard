@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { IconX } from '@tabler/icons-svelte';
 	import { fade, fly } from 'svelte/transition';
+	import Icon from './Icon.svelte';
 
 	export let formOpen: boolean = false;
 	export let toggleForm: () => void;
@@ -21,7 +21,7 @@
 			in:fly={{ y: -50, delay: 250 }}
 			out:fly={{ y: -50, delay: 100 }}
 		>
-			<IconX size={32} />
+			<Icon size={32} name="x" />
 		</button>
 
 		<slot />
