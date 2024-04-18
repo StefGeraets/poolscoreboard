@@ -21,21 +21,22 @@ model Team {
 }
 
 model Player {
-  id              Int     @id @default(autoincrement())
-  name            String  @unique
-  teamId          Int
-  team            Team    @relation(fields: [teamId], references: [id])
-  challenger      Match[] @relation("challenger")
-  opponent        Match[] @relation("opponent")
-  winner          Match[] @relation("winner")
-  wins            Int     @default(0)
-  s1_score        Int     @default(0)
-  s1_prevRanking  Int     @default(0)
-  s1_curRanking   Int     @default(0)
-  s1_ranked       Boolean @default(false)
-  s1_wins         Int     @default(0)
-  s1_lossess      Int     @default(0)
-  s1_totalGames   Int     @default(0)
+  id                Int     @id @default(autoincrement())
+  name              String  @unique
+  teamId            Int
+  team              Team    @relation(fields: [teamId], references: [id])
+  challenger        Match[] @relation("challenger")
+  opponent          Match[] @relation("opponent")
+  winner            Match[] @relation("winner")
+  wins              Int     @default(0)
+  s1_score          Int     @default(0)
+  s1_prevScore      Int     @default(0)
+  s1_ranked         Boolean @default(false)
+  s1_wins           Int     @default(0)
+  s1_lossess        Int     @default(0)
+  s1_totalGames     Int     @default(0)
+  s1_onAStreak      Boolean @default(false)
+  s1_currentStreak  Int     @default(0)
 }
 
 model Match {

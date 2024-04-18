@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { quadIn, quadOut } from 'svelte/easing';
 	import { fade, fly, scale } from 'svelte/transition';
 
@@ -24,10 +25,11 @@
 		working = true;
 	};
 
-	const enhanceFormSubmit = () => {
+	const enhanceFormSubmit: SubmitFunction = () => {
 		return async ({ result, update }) => {
-			if (result.data.success) {
+			if (result.type === 'success') {
 				working = false;
+				toggleForm();
 				update();
 			}
 		};
@@ -67,11 +69,11 @@
 		</button>
 		<form
 			method="POST"
-			action="?/addMatch"
+			action="/?/addMatch"
 			on:submit|preventDefault={handleSubmit}
 			use:enhance={enhanceFormSubmit}
-			in:scale={{ start: 1.5, duration: 300, delay: 150, easing: quadOut }}
-			out:scale={{ start: 0.8, duration: 300, easing: quadIn }}
+			in:scale={{ start: 0.9, duration: 200, delay: 150, easing: quadOut }}
+			out:scale={{ start: 0.9, duration: 200, easing: quadIn }}
 			class="z-20 flex flex-col self-center gap-4 text-blue-100"
 		>
 			<div class="grid w-full grid-cols-2 gap-4">
