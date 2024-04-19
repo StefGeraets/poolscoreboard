@@ -3,6 +3,7 @@
 	import type { Player, Team } from '@prisma/client';
 	import Dialog from '../lib/components/Dialog.svelte';
 	import { enhance } from '$app/forms';
+	import Icon from '../lib/components/Icon.svelte';
 
 	type SortType = 'byWins' | 'byTotal' | 'byScore' | 'byLossess';
 
@@ -154,28 +155,32 @@
 
 	{#each sortedPlayersData(playerData, playerSort) as player, index}
 		<a
-			href={`/player/${player.name}`}
-			class="grid items-center grid-cols-2 px-4 py-2 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
+			href={`/players/${player.name}`}
+			class="grid items-center grid-cols-3 px-4 py-2 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
 		>
-			<div class="flex items-center">
-				<div class="w-10">{index + 4}.</div>
+			<div class="flex items-center col-span-2">
+				<div class="flex w-10 gap-1">
+					<span>{index + 4}.</span>
+					<div class="self-start text-green-600">
+						<Icon name="arrowUp" size={12} />
+					</div>
+					<!-- <div class="self-end text-red-600">
+						<Icon name="arrowDown" size={12} />
+					</div> -->
+				</div>
 				<div class="flex flex-col items-start">
 					<span class="font-bold">{player.name}</span>
-					<div class="text-sm text-gray-400">
-						{player.s1_score}
+					<div class="text-[9px] uppercase text-gray-400">
+						{player.s1_wins} Wins | {player.s1_lossess} Lost | {player.s1_totalGames} matches
 					</div>
 				</div>
-				<div>🔥</div>
+				<!-- <div>🔥</div> -->
 			</div>
-			<div class="flex flex-col items-end text-end">
-				<div class="flex items-center justify-end gap-1">
-					<div class="text-sm">
-						<span class="text-red-600">{player.s1_lossess}</span>
-						\
-					</div>
-					<span class="font-bold text-green-500">{player.s1_wins}</span>
+			<div class="flex items-center justify-end gap-4">
+				<div class="text-[10px] text-green-600">+12</div>
+				<div class="text-lg">
+					{player.s1_score}
 				</div>
-				<span class="text-xs text-gray-400">KD: {player.s1_currentStreak}</span>
 			</div>
 		</a>
 	{/each}

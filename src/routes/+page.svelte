@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { expoInOut, quadOut } from 'svelte/easing';
+	import PageHeader from '../lib/components/PageHeader.svelte';
 
 	type FilterOptions = 'score' | 'wins' | 'lossess' | 'total';
 
@@ -25,10 +26,8 @@
 	};
 </script>
 
-<header class="grid items-center grid-cols-4 py-4 mx-2 mb-4 text-xl bg-gray-950">
-	<div></div>
-	<h1 class="col-span-2 font-black text-center text-gray-600">Pool Scoreboard</h1>
-	<div class="self-center">
+<PageHeader title="Pool Scoreboard">
+	<div class="self-center" slot="right">
 		<button
 			class="relative flex items-center w-full gap-1 px-2 py-1 text-xs tracking-wide text-gray-300 uppercase bg-gray-900 rounded-t"
 			class:rounded-b={!filterOpen}
@@ -71,7 +70,13 @@
 			{/if}
 		</button>
 	</div>
-</header>
+</PageHeader>
+
+<section class="">
+	<button>dayly</button>
+	<button>weekly</button>
+	<button>monthly</button>
+</section>
 
 <div class="grid grid-cols-3 items-end gap-2 px-4 h-[176px] lg:max-w-2xl mx-auto">
 	{#if ready}
