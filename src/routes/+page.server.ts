@@ -108,7 +108,7 @@ export const actions: Actions = {
 		const player1Id = Number(data.get('player1'));
 		const player2Id = Number(data.get('player2'));
 		const winnerId = Number(data.get('winner'));
-		const method = String(data.get('method'));
+		const method = String(data.get('method')) || 'fair';
 
 		const BASE_WIN_SCORE = 10;
 		const BASE_LOSE_SCORE = 0;
@@ -128,11 +128,6 @@ export const actions: Actions = {
 		if (!winningPlayer || !method || !losingPlayer) {
 			return fail(400, { winnerId, notFound: true });
 		}
-
-		// TODO: un comment this create match
-		// await DB.match.create({
-		// 	data: { player1Id, player2Id, winnerId, method }
-		// });
 
 		const streakData = (player: Player, isWinning: boolean = false) => {
 			let s1_onAStreak: boolean = false;
@@ -156,26 +151,29 @@ export const actions: Actions = {
 
 		const getScore = (isWinning: boolean = false) => {
 			let s1_score: number = 0;
+			let _score: number = 0;
 
 			// Player is winning
 			if (isWinning) {
 				// losing player is not ranked
 				if (!losingPlayer.s1_ranked) {
+					_score = 10;
 					s1_score = winningPlayer.s1_score + 10;
 				} else {
 					// Score calculation
-					const score = BASE_WIN_SCORE + (winningIndex - losingIndex);
-					s1_score = winningPlayer.s1_score + Math.min(Math.max(5, score), 15);
+					_score = Math.min(Math.max(5, BASE_WIN_SCORE + (winningIndex - losingIndex)), 15);
+					s1_score = winningPlayer.s1_score + _score;
 				}
 			} else {
 				// Player is loser
-				const score = losingIndex - winningIndex;
-				s1_score = losingPlayer.s1_score + Math.min(Math.max(-5, score), BASE_LOSE_SCORE);
+				_score = Math.min(Math.max(-5, losingIndex - winningIndex), BASE_LOSE_SCORE);
+				s1_score = losingPlayer.s1_score + _score;
 			}
 
 			return {
 				s1_score,
-				s1_ranked: true
+				s1_ranked: true,
+				_score
 			};
 		};
 
@@ -192,12 +190,26 @@ export const actions: Actions = {
 		const winScore = getScore(true);
 		const loseScore = getScore();
 
+		// TODO: un comment this create match
+		await DB.match.create({
+			data: {
+				player1Id,
+				player2Id,
+				winnerId,
+				method,
+				s1: true,
+				s1_pointsWon: winScore._score,
+				s1_pointsLost: loseScore._score
+			}
+		});
+
 		// update winner
 		await DB.player.update({
 			where: { id: winningPlayer.id },
 			data: {
 				...streakData(winningPlayer, true),
-				...winScore,
+				s1_score: winScore.s1_score,
+				s1_ranked: winScore.s1_ranked,
 				s1_wins: winningPlayer.s1_wins + 1,
 				s1_totalGames: winningPlayer.s1_totalGames + 1
 			}
@@ -208,7 +220,8 @@ export const actions: Actions = {
 			where: { id: losingPlayer.id },
 			data: {
 				...streakData(losingPlayer),
-				...loseScore,
+				s1_score: loseScore.s1_score,
+				s1_ranked: loseScore.s1_ranked,
 				s1_lossess: winningPlayer.s1_lossess + 1,
 				s1_totalGames: winningPlayer.s1_totalGames + 1
 			}

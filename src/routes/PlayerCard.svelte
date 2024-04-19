@@ -156,12 +156,13 @@
 	{#each sortedPlayersData(playerData, playerSort) as player, index}
 		<a
 			href={`/players/${player.name}`}
-			class="grid items-center grid-cols-3 px-4 py-2 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
+			class="grid items-center grid-cols-3 py-2 pl-2 pr-4 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
+			class:opacity-20={!player.s1_ranked}
 		>
 			<div class="flex items-center col-span-2">
-				<div class="flex w-10 gap-1">
-					<span>{index + 4}.</span>
-					<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3">
+				<div class="flex w-12 gap-1">
+					<span class="w-5 pt-0.5">{index + 4}.</span>
+					<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3 place-items-center">
 						<div class="self-start text-green-600">
 							<Icon name="arrowUp" size={12} />
 						</div>
@@ -174,7 +175,7 @@
 				<div class="flex flex-col items-start">
 					<span class="font-bold">{player.name}</span>
 					<div class="text-[9px] uppercase text-gray-400">
-						{player.s1_wins} Wins | {player.s1_lossess} Lost | {player.s1_totalGames} matches
+						{player.s1_wins} Won | {player.s1_lossess} Lost | {player.s1_totalGames} matches
 					</div>
 				</div>
 				<!-- <div>🔥</div> -->

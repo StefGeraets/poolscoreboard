@@ -186,7 +186,7 @@
 
 <PlayerCard playerData={data.players.slice(3, -1)} />
 
-<footer class="container flex justify-end pt-8 pb-20 mx-auto"></footer>
+<div class="pb-2"></div>
 
 <style lang="postcss">
 	.gold-bar {

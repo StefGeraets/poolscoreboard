@@ -5,7 +5,6 @@
 	export let title: string = 'Pool Scoreboard';
 
 	$: isHome = $page.url.pathname === '/';
-	console.log($page);
 </script>
 
 <header class="grid items-center grid-cols-4 py-4 mx-2 text-xl bg-gray-950">

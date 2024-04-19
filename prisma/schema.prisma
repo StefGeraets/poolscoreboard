@@ -43,13 +43,16 @@ model Player {
 }
 
 model Match {
-  id        Int       @id @default(autoincrement())
-  player1Id Int
-  player1   Player    @relation("challenger", fields: [player1Id], references: [id])
-  player2Id Int
-  player2   Player    @relation("opponent", fields: [player2Id], references: [id])
-  createdAt DateTime  @default(now())
-  winnerId  Int
-  winner    Player    @relation("winner", fields: [winnerId], references: [id])
-  method    String    @default("fair")
+  id            Int       @id @default(autoincrement())
+  player1Id     Int
+  player1       Player    @relation("challenger", fields: [player1Id], references: [id])
+  player2Id     Int
+  player2       Player    @relation("opponent", fields: [player2Id], references: [id])
+  createdAt     DateTime  @default(now())
+  winnerId      Int
+  winner        Player    @relation("winner", fields: [winnerId], references: [id])
+  method        String    @default("fair")
+  s1            Boolean   @default(false)
+  s1_pointsWon  Int       @default(0)
+  s1_pointsLost Int       @default(0)
 }
