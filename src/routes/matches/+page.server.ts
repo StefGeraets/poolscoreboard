@@ -1,10 +1,10 @@
 import type { PageServerLoad } from '../$types';
 import DB from '$lib';
 
-const PAGE_SIZE: number = 20;
+const PAGE_SIZE: number = 10;
 
 export const load: PageServerLoad = async ({ url }) => {
-	const page = +(url.searchParams.get('page') || 1) - 1;
+	const page = +(url.searchParams.get('page') || 0);
 
 	const [count, matches] = await Promise.all([
 		DB.match.count({ where: { s1: true } }),
@@ -29,6 +29,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		page,
 		count,
 		pages: Math.ceil(count / PAGE_SIZE),
-		matches
+		matches,
+		size: PAGE_SIZE
 	};
 };

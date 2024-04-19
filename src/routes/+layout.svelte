@@ -18,7 +18,7 @@
 <main class="bg-gray-950">
 	<MatchForm formOpen={matchFormOpen} toggleForm={toggleMatchForm} />
 
-	<section class="pb-20">
+	<section class="pb-28">
 		<slot />
 	</section>
 
