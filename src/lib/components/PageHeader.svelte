@@ -1,9 +1,23 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import Icon from './Icon.svelte';
+
 	export let title: string = 'Pool Scoreboard';
+
+	$: isHome = $page.url.pathname === '/';
+	console.log($page);
 </script>
 
 <header class="grid items-center grid-cols-4 py-4 mx-2 text-xl bg-gray-950">
-	<slot name="left"><div></div></slot>
+	<slot name="left">
+		{#if !isHome}
+			<a href="/">
+				<Icon name="chevronLeft" />
+			</a>
+		{:else}
+			<div></div>
+		{/if}
+	</slot>
 	<h1 class="col-span-2 font-black text-center text-gray-600">{title}</h1>
 	<slot name="right"><div></div></slot>
 </header>

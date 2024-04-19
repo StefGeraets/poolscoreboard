@@ -161,12 +161,15 @@
 			<div class="flex items-center col-span-2">
 				<div class="flex w-10 gap-1">
 					<span>{index + 4}.</span>
-					<div class="self-start text-green-600">
-						<Icon name="arrowUp" size={12} />
+					<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3">
+						<div class="self-start text-green-600">
+							<Icon name="arrowUp" size={12} />
+						</div>
+						<div class="text-green-600">+2</div>
+						<div class="self-end text-red-600">
+							<!-- <Icon name="arrowDown" size={12} /> -->
+						</div>
 					</div>
-					<!-- <div class="self-end text-red-600">
-						<Icon name="arrowDown" size={12} />
-					</div> -->
 				</div>
 				<div class="flex flex-col items-start">
 					<span class="font-bold">{player.name}</span>

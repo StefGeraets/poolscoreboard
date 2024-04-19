@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import Icon from './Icon.svelte';
+	import { page } from '$app/stores';
 
 	export let toggleMatchForm: () => void;
 
@@ -24,16 +25,26 @@
 			title: 'See sourcecode'
 		}
 	];
+
+	$: path = $page.url.pathname;
 </script>
 
 <footer class="fixed bottom-0 w-full rounded-t-2xl bg-gray-950/60 backdrop-blur-md">
 	<ul class="flex items-center justify-around">
-		<li class="p-4">
+		<li
+			class="relative p-4 menu-item"
+			class:text-blue-500={path === '/'}
+			class:active={path === '/'}
+		>
 			<a href="/" class="w-6 h-6 disabled:text-gray-600">
 				<Icon name="trophy" />
 			</a>
 		</li>
-		<li class="p-4">
+		<li
+			class="relative p-4 menu-item"
+			class:text-blue-500={path === '/matches'}
+			class:active={path === '/matches'}
+		>
 			<a href="/matches" class="w-6 h-6 disabled:text-gray-600">
 				<Icon name="8ball" />
 			</a>
@@ -46,16 +57,20 @@
 				<Icon size={40} name="plus" />
 			</button>
 		</li>
-		<li class="p-4">
+		<li
+			class="relative p-4 menu-item"
+			class:text-blue-500={path.split('/').includes('players')}
+			class:active={path.split('/').includes('players')}
+		>
 			<a href="/players" class="w-6 h-6 disabled:text-gray-600">
 				<Icon name="user" />
 			</a>
 		</li>
-		<li class="relative p-4">
+		<li class="relative p-4 menu-item" class:text-blue-500={extraMenuOpen}>
 			{#if extraMenuOpen}
 				<div
 					transition:slide
-					class="absolute right-0 flex flex-col gap-1 px-1 py-1 text-xs rounded-t shadow-md bottom-full w-52 min-w-min max-w-max bg-gray-950"
+					class="absolute right-0 flex flex-col gap-1 px-1 py-1 text-xs rounded-t shadow-md text-gray-50 bottom-full w-52 min-w-min max-w-max bg-gray-950"
 				>
 					{#each extraMenuItems as menuItem}
 						<a
@@ -69,11 +84,34 @@
 			{/if}
 			<button
 				on:click={() => (extraMenuOpen = !extraMenuOpen)}
-				class="w-6 h-6 transition-transform"
-				class:text-blue-800={extraMenuOpen}
+				class="w-6 h-6 align-middle transition-transform"
+				class:-rotate-90={extraMenuOpen}
 			>
 				<Icon name="dots" />
 			</button>
 		</li>
 	</ul>
 </footer>
+
+<style>
+	.menu-item:after {
+		content: '';
+		position: absolute;
+		left: 5px;
+		bottom: -5%;
+		background: radial-gradient(
+			at bottom,
+			rgba(219, 234, 254, 0.6) 0%,
+			rgba(96, 165, 250, 0.4) 25%,
+			rgba(0, 0, 0, 0) 65%
+		);
+		width: 46px;
+		height: 35px;
+		transition: opacity 300ms ease-out;
+		opacity: 1;
+		pointer-events: none;
+	}
+	.menu-item:not(.active):after {
+		opacity: 0;
+	}
+</style>
