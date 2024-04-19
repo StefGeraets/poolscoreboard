@@ -3,21 +3,30 @@ import type { Player } from '@prisma/client';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url }) => {
-	const players = await DB.player.findMany();
-
-	const sortedPlayers = players.sort((a, b) => {
-		if (a.s1_curRanking < b.s1_curRanking) return 1;
-		if (a.s1_curRanking > b.s1_curRanking) return -1;
-
-		if (a.name < b.name) return -1;
-		if (a.name > b.name) return 1;
-
-		return 0;
+	const players = await DB.player.findMany({
+		orderBy: [
+			{
+				s1_score: 'desc'
+			},
+			{
+				name: 'asc'
+			}
+		]
 	});
 
-	let result: Partial<Player[]> = sortedPlayers;
+	// const sortedPlayers = players.sort((a, b) => {
+	// 	if (a.s1_score < b.s1_score) return 1;
+	// 	if (a.s1_score > b.s1_score) return -1;
+
+	// 	if (a.name < b.name) return -1;
+	// 	if (a.name > b.name) return 1;
+
+	// 	return 0;
+	// });
+
+	let result: Partial<Player>[] = players;
 	if (url.searchParams.has('simple')) {
-		result = sortedPlayers.map((player) => ({
+		result = players.map((player) => ({
 			id: player.id,
 			name: player.name
 		}));

@@ -4,28 +4,14 @@
 	import Dialog from '../lib/components/Dialog.svelte';
 	import { enhance } from '$app/forms';
 
-	type WinLose = {
-		id: number;
-		name: string;
-		amountOfGames: number;
-		wins: number;
-		lossess: number;
-		kd: number;
-	};
-
-	type SortType = 'byWins' | 'byTotal' | 'byKD' | 'byLossess';
+	type SortType = 'byWins' | 'byTotal' | 'byScore' | 'byLossess';
 
 	let playerCreateDialog: HTMLDialogElement;
 	let playerEditDialog: HTMLDialogElement;
 
-	let playerId: number;
-	let playerName: string;
-	let teamId: number;
-
 	export let playerData: Player[];
-	export let winsLossess: WinLose[];
 
-	let playerSort: SortType = 'byWins';
+	let playerSort: SortType = 'byScore';
 
 	const shouldCloseModal = () => {
 		if ($page.form?.success) {
@@ -36,48 +22,28 @@
 
 	// const createButtonModal = () => playerCreateDialog.showModal();
 
-	$: sortedPlayersData = (
-		playerData: Player[],
-		winsLossess: WinLose[],
-		sortType: SortType
-	): {
-		id: number;
-		name: string;
-		// team: number;
-		kd: number;
-		wins: number;
-		lossess: number;
-		totalGames: number;
-	}[] => {
+	$: sortedPlayersData = (playerData: Player[], sortType: SortType): Player[] => {
 		const combinedPlayerData = playerData.map((player) => {
-			const playerStats = winsLossess.find((match) => match.id === player.id);
-
 			return {
-				id: player.id,
-				name: player.name,
-				// team: player.team.name,
-				kd: playerStats!.kd,
-				wins: player.wins,
-				lossess: playerStats!.lossess,
-				totalGames: playerStats!.amountOfGames
+				...player
 			};
 		});
 
-		if (sortType === 'byKD') {
+		if (sortType === 'byWins') {
 			return combinedPlayerData.sort((p1, p2) => {
-				return p1.kd < p2.kd ? 1 : -1;
+				return p1.s1_wins < p2.s1_wins ? 1 : -1;
 			});
 		}
 
 		if (sortType === 'byTotal') {
 			return combinedPlayerData.sort((p1, p2) => {
-				return p1.totalGames < p2.totalGames ? 1 : -1;
+				return p1.s1_totalGames < p2.s1_totalGames ? 1 : -1;
 			});
 		}
 
 		if (sortType === 'byLossess') {
 			return combinedPlayerData.sort((p1, p2) => {
-				return p1.lossess < p2.lossess ? 1 : -1;
+				return p1.s1_lossess < p2.s1_lossess ? 1 : -1;
 			});
 		}
 
@@ -186,7 +152,7 @@
     </form>
   </Dialog> -->
 
-	{#each sortedPlayersData(playerData, winsLossess, playerSort) as player, index}
+	{#each sortedPlayersData(playerData, playerSort) as player, index}
 		<a
 			href={`/player/${player.name}`}
 			class="grid items-center grid-cols-2 px-4 py-2 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
@@ -196,19 +162,20 @@
 				<div class="flex flex-col items-start">
 					<span class="font-bold">{player.name}</span>
 					<div class="text-sm text-gray-400">
-						<!-- {player.team} -->
+						{player.s1_score}
 					</div>
 				</div>
+				<div>🔥</div>
 			</div>
 			<div class="flex flex-col items-end text-end">
 				<div class="flex items-center justify-end gap-1">
 					<div class="text-sm">
-						<span class="text-red-600">{player.lossess}</span>
+						<span class="text-red-600">{player.s1_lossess}</span>
 						\
 					</div>
-					<span class="font-bold text-green-500">{player.wins}</span>
+					<span class="font-bold text-green-500">{player.s1_wins}</span>
 				</div>
-				<span class="text-xs text-gray-400">KD: {player.kd}</span>
+				<span class="text-xs text-gray-400">KD: {player.s1_currentStreak}</span>
 			</div>
 		</a>
 	{/each}

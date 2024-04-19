@@ -1,15 +1,14 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import DB from '../lib';
 import type { PageServerLoad } from './$types';
-import { players } from '../lib/db/fetches';
+// import { players } from '../lib/db/fetches';
 import type { Player } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-	const winsLossess = await fetch(`/api/winsLossess`).then((r) => r.json());
+	const players = await fetch(`/api/players`).then((r) => r.json());
 
 	return {
-		players: await players(),
-		winsLossess: winsLossess.matchesPerPlayer
+		players: await players
 	};
 };
 
@@ -126,21 +125,14 @@ export const actions: Actions = {
 		const winningPlayer = gamePlayers.find((p) => p.id === winnerId);
 		const losingPlayer = gamePlayers.find((p) => p.id !== winnerId);
 
-		// const winningPlayer = await DB.player.findFirst({
-		// 	where: { id: winnerId },
-		// 	include: {
-		// 		team: true
-		// 	}
-		// });
-
 		if (!winningPlayer || !method || !losingPlayer) {
 			return fail(400, { winnerId, notFound: true });
 		}
 
-		// create match
-		await DB.match.create({
-			data: { player1Id, player2Id, winnerId, method }
-		});
+		// TODO: un comment this create match
+		// await DB.match.create({
+		// 	data: { player1Id, player2Id, winnerId, method }
+		// });
 
 		const streakData = (player: Player, isWinning: boolean = false) => {
 			let s1_onAStreak: boolean = false;
@@ -165,15 +157,6 @@ export const actions: Actions = {
 		const getScore = (isWinning: boolean = false) => {
 			let s1_score: number = 0;
 
-			const losingIndex: number =
-				winningPlayer.s1_ranked && losingPlayer.s1_ranked
-					? allPlayers.findIndex((p) => (p.id = losingPlayer.id)) + 1
-					: 0;
-			const winningIndex: number =
-				winningPlayer.s1_ranked && losingPlayer.s1_ranked
-					? allPlayers.findIndex((p) => (p.id = winningPlayer.id)) + 1
-					: 0;
-
 			// Player is winning
 			if (isWinning) {
 				// losing player is not ranked
@@ -195,6 +178,16 @@ export const actions: Actions = {
 				s1_ranked: true
 			};
 		};
+
+		const losingIndex: number =
+			winningPlayer.s1_ranked && losingPlayer.s1_ranked
+				? allPlayers.findIndex((p) => p.id === losingPlayer.id) + 1
+				: 0;
+
+		const winningIndex: number =
+			winningPlayer.s1_ranked && losingPlayer.s1_ranked
+				? allPlayers.findIndex((p) => p.id === winningPlayer.id) + 1
+				: 0;
 
 		const winScore = getScore(true);
 		const loseScore = getScore();
@@ -220,15 +213,6 @@ export const actions: Actions = {
 				s1_totalGames: winningPlayer.s1_totalGames + 1
 			}
 		});
-
-		// if (players[0].teamId !== players[1].teamId) {
-		// 	await DB.team.update({
-		// 		where: { id: winningPlayer.team.id },
-		// 		data: {
-		// 			score: winningPlayer.team.score + 1
-		// 		}
-		// 	});
-		// }
 
 		return { success: true };
 	}

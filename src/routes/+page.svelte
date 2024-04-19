@@ -3,44 +3,22 @@
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { expoInOut, quadOut } from 'svelte/easing';
-	import type { Player, Team } from '@prisma/client';
-	import Icon from '../lib/components/Icon.svelte';
 
 	type FilterOptions = 'score' | 'wins' | 'lossess' | 'total';
+
 	export let data;
+
 	let currentFilter: FilterOptions = 'score';
 	let ready: boolean = false;
 	let filterOpen: boolean = false;
 
 	const filterOptions: FilterOptions[] = ['score', 'wins', 'lossess', 'total'];
 
-	type WinLose = {
-		id: number;
-		name: string;
-		amountOfGames: number;
-		wins: number;
-		lossess: number;
-		kd: number;
-	};
-
-	$: firstPlayer = combinePlayer(data.players.slice(0, 1)[0]);
-	$: secondPlayer = combinePlayer(data.players.slice(1, 2)[0]);
-	$: thirdPlayer = combinePlayer(data.players.slice(2, 3)[0]);
+	$: firstPlayer = data.players.slice(0, 1)[0];
+	$: secondPlayer = data.players.slice(1, 2)[0];
+	$: thirdPlayer = data.players.slice(2, 3)[0];
 
 	onMount(() => (ready = true));
-
-	const combinePlayer = (player: Player) => {
-		const playerStats = data.winsLossess.find((match: WinLose) => match.id === player.id);
-
-		return {
-			id: player.id,
-			name: player.name,
-			kd: playerStats!.kd,
-			wins: player.wins,
-			lossess: playerStats!.lossess,
-			totalGames: playerStats!.amountOfGames
-		};
-	};
 
 	const openFilter = (): void => {
 		filterOpen = !filterOpen;
@@ -103,9 +81,9 @@
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{secondPlayer.name}</span>
-				<!-- <span class="text-sm font-normal normal-case text-gray-50/50">
-					{secondPlayer.team}
-				</span> -->
+				<span class="text-sm font-normal normal-case text-gray-50/50">
+					{secondPlayer.s1_score}
+				</span>
 			</h3>
 			<div
 				in:slide={{ delay: 600, duration: 750, easing: quadOut }}
@@ -115,15 +93,18 @@
 					<div class="flex justify-between text-xs">
 						<span>W / L:</span>
 						<span class="font-bold text-white">
-							<span class="text-green-400">{secondPlayer.wins}</span> /
-							<span class="text-red-400">{secondPlayer.lossess}</span>
+							<span class="text-green-400">{secondPlayer.s1_wins}</span> /
+							<span class="text-red-400">{secondPlayer.s1_lossess}</span>
 						</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{secondPlayer.kd}</span>
+						<span>KD:</span><span class="font-bold text-white">{secondPlayer.s1_currentStreak}</span
+						>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>Matches:</span><span class="font-bold text-white">{secondPlayer.totalGames}</span>
+						<span>Matches:</span><span class="font-bold text-white">
+							{secondPlayer.s1_totalGames}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -134,9 +115,9 @@
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{firstPlayer.name}</span>
-				<!-- <span class="text-sm font-normal normal-case text-gray-50/50">
-					{firstPlayer.team}
-				</span> -->
+				<span class="text-sm font-normal normal-case text-gray-50/50">
+					{firstPlayer.s1_score}
+				</span>
 			</h3>
 			<div
 				in:slide={{ delay: 1100, duration: 750, easing: quadOut }}
@@ -144,16 +125,19 @@
 			>
 				<div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
 					<div class="flex justify-between text-xs">
-						<span>W / L:</span><span class="font-bold text-white"
-							><span class="text-green-400">{firstPlayer.wins}</span> /
-							<span class="text-red-400">{firstPlayer.lossess}</span></span
-						>
+						<span>W / L:</span>
+						<span class="font-bold text-white">
+							<span class="text-green-400">{firstPlayer.s1_wins}</span> /
+							<span class="text-red-400">{firstPlayer.s1_lossess}</span>
+						</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{firstPlayer.kd}</span>
+						<span>KD:</span><span class="font-bold text-white">{firstPlayer.s1_currentStreak}</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>Matches:</span><span class="font-bold text-white">{firstPlayer.totalGames}</span>
+						<span>Matches:</span><span class="font-bold text-white">
+							{firstPlayer.s1_totalGames}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -164,9 +148,9 @@
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{thirdPlayer.name}</span>
-				<!-- <span class="text-sm font-normal normal-case text-gray-50/50">
-					{thirdPlayer.team}
-				</span> -->
+				<span class="text-sm font-normal normal-case text-gray-50/50">
+					{thirdPlayer.s1_score}
+				</span>
 			</h3>
 			<div
 				in:slide={{ delay: 100, duration: 750, easing: quadOut }}
@@ -176,15 +160,18 @@
 					<div class="flex justify-between text-xs">
 						<span>W / L:</span>
 						<span class="font-bold text-white">
-							<span class="text-green-400">{thirdPlayer.wins}</span> /
-							<span class="text-red-400">{thirdPlayer.lossess}</span>
+							<span class="text-green-400">{thirdPlayer.s1_wins}</span> /
+							<span class="text-red-400">{thirdPlayer.s1_lossess}</span>
 						</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{thirdPlayer.kd}</span>
+						<span>KD:</span><span class="font-bold text-white">{thirdPlayer.s1_currentStreak}</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>Matches:</span><span class="font-bold text-white">{thirdPlayer.totalGames}</span>
+						<span>Matches:</span>
+						<span class="font-bold text-white">
+							{thirdPlayer.s1_totalGames}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -192,7 +179,7 @@
 	{/if}
 </div>
 
-<PlayerCard playerData={data.players.slice(3, -1)} winsLossess={data.winsLossess} />
+<PlayerCard playerData={data.players.slice(3, -1)} />
 
 <footer class="container flex justify-end pt-8 pb-20 mx-auto"></footer>
 
