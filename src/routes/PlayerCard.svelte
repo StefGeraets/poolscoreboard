@@ -5,7 +5,7 @@
 	import { enhance } from '$app/forms';
 	import Icon from '../lib/components/Icon.svelte';
 
-	type SortType = 'byWins' | 'byTotal' | 'byScore' | 'byLossess';
+	type SortType = 'byWins' | 'byTotal' | 'byScore' | 'byLosses';
 
 	let playerCreateDialog: HTMLDialogElement;
 	let playerEditDialog: HTMLDialogElement;
@@ -42,7 +42,7 @@
 			});
 		}
 
-		if (sortType === 'byLossess') {
+		if (sortType === 'byLosses') {
 			return combinedPlayerData.sort((p1, p2) => {
 				return p1.s1_lossess < p2.s1_lossess ? 1 : -1;
 			});

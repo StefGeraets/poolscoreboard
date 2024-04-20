@@ -5,12 +5,18 @@
 	export let title: string = 'Pool Scoreboard';
 
 	$: isHome = $page.url.pathname === '/';
+	$: isPlayer =
+		$page.url.pathname.split('/').length > 2 && $page.url.pathname.split('/').includes('players');
 </script>
 
 <header class="grid items-center grid-cols-4 py-4 mx-2 text-xl bg-gray-950">
 	<slot name="left">
-		{#if !isHome}
+		{#if !isHome && !isPlayer}
 			<a href="/">
+				<Icon name="home" />
+			</a>
+		{:else if isPlayer}
+			<a href="/players">
 				<Icon name="chevronLeft" />
 			</a>
 		{:else}

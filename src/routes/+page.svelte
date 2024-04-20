@@ -5,15 +5,17 @@
 	import { expoInOut, quadOut } from 'svelte/easing';
 	import PageHeader from '../lib/components/PageHeader.svelte';
 
-	type FilterOptions = 'score' | 'wins' | 'lossess' | 'total';
+	type FilterOptions = 'score' | 'wins' | 'losses' | 'total';
+	type CompareOptions = 'daily' | 'weekly' | 'monthly';
 
 	export let data;
 
 	let currentFilter: FilterOptions = 'score';
 	let ready: boolean = false;
 	let filterOpen: boolean = false;
+	let compareOption: CompareOptions = 'weekly';
 
-	const filterOptions: FilterOptions[] = ['score', 'wins', 'lossess', 'total'];
+	const filterOptions: FilterOptions[] = ['score', 'wins', 'losses', 'total'];
 
 	$: firstPlayer = data.players.slice(0, 1)[0];
 	$: secondPlayer = data.players.slice(1, 2)[0];
@@ -72,24 +74,42 @@
 	</div>
 </PageHeader>
 
-<section class="">
-	<button>dayly</button>
-	<button>weekly</button>
-	<button>monthly</button>
+<section
+	class="grid grid-cols-3 mx-4 mb-8 overflow-hidden text-xs text-gray-500 border rounded bg-gray-900/20 border-gray-800/30"
+>
+	<button
+		on:click={() => (compareOption = 'daily')}
+		class="py-1 uppercase"
+		class:bg-gray-900={compareOption === 'daily'}
+		class:text-blue-400={compareOption === 'daily'}>daily</button
+	>
+	<button
+		on:click={() => (compareOption = 'weekly')}
+		class="py-1 uppercase"
+		class:bg-gray-900={compareOption === 'weekly'}
+		class:text-blue-400={compareOption === 'weekly'}>weekly</button
+	>
+	<button
+		on:click={() => (compareOption = 'monthly')}
+		class="py-1 uppercase"
+		class:bg-gray-900={compareOption === 'monthly'}
+		class:text-blue-400={compareOption === 'monthly'}>monthly</button
+	>
 </section>
 
 <div class="grid grid-cols-3 items-end gap-2 px-4 h-[176px] lg:max-w-2xl mx-auto">
 	{#if ready}
 		<div>
-			<h3
+			<a
+				href={`/players/${secondPlayer.name}`}
 				in:fly={{ delay: 1250, y: 15, opacity: 0, easing: expoInOut }}
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{secondPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/50">
+				<span class="text-sm font-normal normal-case text-gray-50/75">
 					{secondPlayer.s1_score}
 				</span>
-			</h3>
+			</a>
 			<div
 				in:slide={{ delay: 600, duration: 750, easing: quadOut }}
 				class="relative h-24 rounded-t-md silver-bar"
@@ -103,10 +123,6 @@
 						</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{secondPlayer.s1_currentStreak}</span
-						>
-					</div>
-					<div class="flex justify-between text-xs">
 						<span>Matches:</span><span class="font-bold text-white">
 							{secondPlayer.s1_totalGames}
 						</span>
@@ -115,15 +131,16 @@
 			</div>
 		</div>
 		<div>
-			<h3
+			<a
+				href={`/players/${firstPlayer.name}`}
 				in:fly={{ delay: 1750, y: 15, opacity: 0, easing: expoInOut }}
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{firstPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/50">
+				<span class="text-sm font-normal normal-case text-gray-50/75">
 					{firstPlayer.s1_score}
 				</span>
-			</h3>
+			</a>
 			<div
 				in:slide={{ delay: 1100, duration: 750, easing: quadOut }}
 				class="relative h-32 rounded-t-md gold-bar"
@@ -137,9 +154,6 @@
 						</span>
 					</div>
 					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{firstPlayer.s1_currentStreak}</span>
-					</div>
-					<div class="flex justify-between text-xs">
 						<span>Matches:</span><span class="font-bold text-white">
 							{firstPlayer.s1_totalGames}
 						</span>
@@ -148,15 +162,16 @@
 			</div>
 		</div>
 		<div>
-			<h3
+			<a
+				href={`/players/${thirdPlayer.name}`}
 				in:fly={{ delay: 750, y: 15, opacity: 0, easing: expoInOut }}
 				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 			>
 				<span>{thirdPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/50">
+				<span class="text-sm font-normal normal-case text-gray-50/75">
 					{thirdPlayer.s1_score}
 				</span>
-			</h3>
+			</a>
 			<div
 				in:slide={{ delay: 100, duration: 750, easing: quadOut }}
 				class="relative h-16 rounded-t-md copper-bar"
@@ -168,9 +183,6 @@
 							<span class="text-green-400">{thirdPlayer.s1_wins}</span> /
 							<span class="text-red-400">{thirdPlayer.s1_lossess}</span>
 						</span>
-					</div>
-					<div class="flex justify-between text-xs">
-						<span>KD:</span><span class="font-bold text-white">{thirdPlayer.s1_currentStreak}</span>
 					</div>
 					<div class="flex justify-between text-xs">
 						<span>Matches:</span>

@@ -1,46 +1,60 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+	import PageHeader from '../../../lib/components/PageHeader.svelte';
+	import type { PageData } from './$types';
 
-  export let data: PageData;
+	export let data: PageData;
 </script>
 
-<header class="text-center bg-gray-950 text-blue-100 py-5">
-  <h1 class="text-2xl font-black">{data.player.name}</h1>
+<PageHeader title={data.player.name} />
+<header class="py-5 text-center text-blue-100 bg-gray-950">
+	<h1 class="text-2xl font-black">{data.player.name}</h1>
 </header>
 
-<div class="container lg:px-32 px-1 md:px-4 mx-auto grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-4 justify-items-stretch">
-  <div class="flex flex-col items-center gap-1 bg-gray-900 rounded-lg border border-gray-800 py-4 px-8 md:col-span-1 tabular-nums self-start">
-    <h2 class="uppercase text-green-400">Wins</h2>
-    <p class="text-3xl font-black">{data.stats.wins}</p>
-  </div>
-  <div class="flex flex-col items-center gap-1 bg-gray-900 rounded-lg border border-gray-800 py-4 px-8 md:col-span-1 tabular-nums self-start">
-    <h2 class="uppercase text-red-500">Lossess</h2>
-    <p class="text-3xl font-black ">{data.stats.lossess}</p>
-  </div>
-  <div class="flex flex-col items-center gap-1 bg-gray-900 rounded-lg border border-gray-800 py-4 px-8 md:col-span-1 tabular-nums self-start">
-    <h2 class="uppercase text-blue-400">Total</h2>
-    <p class="text-3xl font-black">{data.stats.amountOfGames}</p>
-  </div>
-  <div class="flex flex-col items-center gap-1 bg-gray-900 rounded-lg border border-gray-800 py-4 px-8 md:col-span-1 tabular-nums self-start">
-    <h2 class="uppercase">K/D</h2>
-    <p class="text-3xl font-black">{data.stats.kd}</p>
-  </div>
+<div
+	class="container grid grid-cols-2 gap-1 px-1 mx-auto lg:px-32 md:px-4 md:grid-cols-4 md:gap-4 justify-items-stretch"
+>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="text-green-400 uppercase">Wins</h2>
+		<p class="text-3xl font-black">{data.stats.wins}</p>
+	</div>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="text-red-500 uppercase">Losses</h2>
+		<p class="text-3xl font-black">{data.stats.lossess}</p>
+	</div>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="text-blue-400 uppercase">Total</h2>
+		<p class="text-3xl font-black">{data.stats.amountOfGames}</p>
+	</div>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="uppercase">K/D</h2>
+		<p class="text-3xl font-black">{data.stats.kd}</p>
+	</div>
 </div>
 
-<div class="text-center text-2xl bg-gray-950 text-blue-100 py-5">
-  <h3 class="text-2xl font-black">Played Games</h3>
+<div class="py-5 text-2xl text-center text-blue-100 bg-gray-950">
+	<h3 class="text-2xl font-black">Played Games</h3>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2 px-1 md:px-2 lg:px-4 container mx-auto">
-  {#each data.matches as match }
-    <div class="flex gap-2 justify-between bg-gray-900 rounded-lg border border-gray-800 py-2 px-4">
-      <div>
-        <span class="font-bold">{match.player.name}</span>
-        <span>{match.player.wins}</span>
-      </div>
-      <div>
-        <span>{match.opponent.wins}</span>
-        <span class="font-bold">{match.opponent.name}</span>
-      </div>
-    </div>
-  {/each}
+<div
+	class="container grid grid-cols-1 gap-2 px-1 mx-auto md:grid-cols-3 lg:grid-cols-5 md:px-2 lg:px-4"
+>
+	{#each data.matches as match}
+		<div class="flex justify-between gap-2 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg">
+			<div>
+				<span class="font-bold">{match.player.name}</span>
+				<span>{match.player.wins}</span>
+			</div>
+			<div>
+				<span>{match.opponent.wins}</span>
+				<span class="font-bold">{match.opponent.name}</span>
+			</div>
+		</div>
+	{/each}
 </div>
