@@ -105,7 +105,7 @@
 		<a
 			href={`/players/${player.name}`}
 			class="relative grid items-center grid-cols-3 py-2 pl-2 pr-4 mx-2 mb-2 overflow-hidden bg-gray-900 rounded-lg w-vw"
-			class:opacity-20={index !== 0}
+			class:opacity-20={!player.s1_ranked}
 		>
 			<div class="flex items-center col-span-2">
 				<div class="flex w-12 gap-1">
