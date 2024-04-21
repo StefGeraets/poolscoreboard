@@ -1,9 +1,10 @@
 <script lang="ts">
 	import PlayerCard from './PlayerCard.svelte';
 	import { onMount } from 'svelte';
-	import { fly, slide } from 'svelte/transition';
-	import { expoInOut, quadOut } from 'svelte/easing';
 	import PageHeader from '../lib/components/PageHeader.svelte';
+	import type { Player } from '@prisma/client';
+	import Podium from '../lib/components/Podium.svelte';
+	import { slide } from 'svelte/transition';
 
 	type FilterOptions = 'score' | 'wins' | 'losses' | 'total';
 	type CompareOptions = 'daily' | 'weekly' | 'monthly';
@@ -17,15 +18,72 @@
 
 	const filterOptions: FilterOptions[] = ['score', 'wins', 'losses', 'total'];
 
-	$: firstPlayer = data.players.slice(0, 1)[0];
-	$: secondPlayer = data.players.slice(1, 2)[0];
-	$: thirdPlayer = data.players.slice(2, 3)[0];
+	$: firstPlayer = playerData.slice(0, 1)[0];
+	$: secondPlayer = playerData.slice(1, 2)[0];
+	$: thirdPlayer = playerData.slice(2, 3)[0];
 
 	onMount(() => (ready = true));
 
 	const openFilter = (): void => {
 		filterOpen = !filterOpen;
 	};
+
+	const sortedPlayersData = (sortType: FilterOptions, players: Player[]): Player[] => {
+		if (sortType === 'wins') {
+			return players.sort((p1, p2) => {
+				if (p1.s1_wins < p2.s1_wins) return 1;
+				if (p1.s1_wins > p2.s1_wins) return -1;
+
+				if (p1.s1_score < p2.s1_score) return 1;
+				if (p1.s1_score > p2.s1_score) return -1;
+
+				return 0;
+			});
+		}
+
+		if (sortType === 'total') {
+			return players.sort((p1, p2) => {
+				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
+				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+				if (p1.s1_score < p2.s1_score) return 1;
+				if (p1.s1_score > p2.s1_score) return -1;
+
+				return 0;
+			});
+		}
+
+		if (sortType === 'losses') {
+			return players.sort((p1, p2) => {
+				if (p1.s1_lossess < p2.s1_lossess) return 1;
+				if (p1.s1_lossess > p2.s1_lossess) return -1;
+
+				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
+				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+				return 0;
+			});
+		}
+
+		if (sortType === 'score') {
+			return players.sort((p1, p2) => {
+				if (p1.s1_score < p2.s1_score) return 1;
+				if (p1.s1_score > p2.s1_score) return -1;
+
+				if (p1.s1_wins < p2.s1_wins) return 1;
+				if (p1.s1_wins > p2.s1_wins) return -1;
+
+				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
+				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+				return 0;
+			});
+		}
+
+		return players;
+	};
+
+	$: playerData = sortedPlayersData(currentFilter, data.players);
 </script>
 
 <PageHeader title="Pool Scoreboard">
@@ -97,106 +155,15 @@
 	>
 </section>
 
-<div class="grid grid-cols-3 items-end gap-2 px-4 h-[176px] lg:max-w-2xl mx-auto">
+<div class="grid grid-cols-3 items-end gap-2 px-4 h-[180px] lg:max-w-2xl mx-auto">
 	{#if ready}
-		<div>
-			<a
-				href={`/players/${secondPlayer.name}`}
-				in:fly={{ delay: 1250, y: 15, opacity: 0, easing: expoInOut }}
-				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
-			>
-				<span>{secondPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/75">
-					{secondPlayer.s1_score}
-				</span>
-			</a>
-			<div
-				in:slide={{ delay: 600, duration: 750, easing: quadOut }}
-				class="relative h-24 rounded-t-md silver-bar"
-			>
-				<div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
-					<div class="flex justify-between text-xs">
-						<span>W / L:</span>
-						<span class="font-bold text-white">
-							<span class="text-green-400">{secondPlayer.s1_wins}</span> /
-							<span class="text-red-400">{secondPlayer.s1_lossess}</span>
-						</span>
-					</div>
-					<div class="flex justify-between text-xs">
-						<span>Matches:</span><span class="font-bold text-white">
-							{secondPlayer.s1_totalGames}
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div>
-			<a
-				href={`/players/${firstPlayer.name}`}
-				in:fly={{ delay: 1750, y: 15, opacity: 0, easing: expoInOut }}
-				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
-			>
-				<span>{firstPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/75">
-					{firstPlayer.s1_score}
-				</span>
-			</a>
-			<div
-				in:slide={{ delay: 1100, duration: 750, easing: quadOut }}
-				class="relative h-32 rounded-t-md gold-bar"
-			>
-				<div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
-					<div class="flex justify-between text-xs">
-						<span>W / L:</span>
-						<span class="font-bold text-white">
-							<span class="text-green-400">{firstPlayer.s1_wins}</span> /
-							<span class="text-red-400">{firstPlayer.s1_lossess}</span>
-						</span>
-					</div>
-					<div class="flex justify-between text-xs">
-						<span>Matches:</span><span class="font-bold text-white">
-							{firstPlayer.s1_totalGames}
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div>
-			<a
-				href={`/players/${thirdPlayer.name}`}
-				in:fly={{ delay: 750, y: 15, opacity: 0, easing: expoInOut }}
-				class="flex flex-col pb-3 font-black leading-none text-center uppercase"
-			>
-				<span>{thirdPlayer.name}</span>
-				<span class="text-sm font-normal normal-case text-gray-50/75">
-					{thirdPlayer.s1_score}
-				</span>
-			</a>
-			<div
-				in:slide={{ delay: 100, duration: 750, easing: quadOut }}
-				class="relative h-16 rounded-t-md copper-bar"
-			>
-				<div class=" bg-black/65 absolute rounded-t-md bottom-0 inset-px p-2 flex flex-col gap-0.5">
-					<div class="flex justify-between text-xs">
-						<span>W / L:</span>
-						<span class="font-bold text-white">
-							<span class="text-green-400">{thirdPlayer.s1_wins}</span> /
-							<span class="text-red-400">{thirdPlayer.s1_lossess}</span>
-						</span>
-					</div>
-					<div class="flex justify-between text-xs">
-						<span>Matches:</span>
-						<span class="font-bold text-white">
-							{thirdPlayer.s1_totalGames}
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
+		<Podium player={secondPlayer} place={2} />
+		<Podium player={firstPlayer} place={1} />
+		<Podium player={thirdPlayer} place={3} />
 	{/if}
 </div>
 
-<PlayerCard playerData={data.players.slice(3, -1)} />
+<PlayerCard playerData={playerData.slice(3, -1)} />
 
 <div class="pb-2"></div>
 

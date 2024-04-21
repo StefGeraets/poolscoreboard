@@ -1,17 +1,29 @@
 <script lang="ts">
 	import type { Player } from '@prisma/client';
-	import { fly, slide } from 'svelte/transition';
+	import { fly, slide, type FlyParams, type SlideParams } from 'svelte/transition';
 	import Icon from './Icon.svelte';
 	import { expoInOut, quadOut } from 'svelte/easing';
 
 	export let player: Player;
 	export let place: 1 | 2 | 3 = 1;
+
+	const flyAnimation: Record<'1' | '2' | '3', FlyParams> = {
+		'1': { delay: 1750, y: 15, opacity: 0, easing: expoInOut },
+		'2': { delay: 1250, y: 15, opacity: 0, easing: expoInOut },
+		'3': { delay: 750, y: 15, opacity: 0, easing: expoInOut }
+	};
+
+	const slideAnimation: Record<'1' | '2' | '3', SlideParams> = {
+		'1': { delay: 1100, duration: 750, easing: quadOut },
+		'2': { delay: 600, duration: 750, easing: quadOut },
+		'3': { delay: 100, duration: 750, easing: quadOut }
+	};
 </script>
 
 <div>
 	<a
 		href={`/players/${player.name}`}
-		in:fly={{ delay: 1750, y: 15, opacity: 0, easing: expoInOut }}
+		in:fly={flyAnimation[place]}
 		class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 	>
 		<div class="flex items-center justify-center">
@@ -29,22 +41,24 @@
 				{/if}
 			</div>
 			{player.name}
-			{#if player.s1_onAStreak && player.s1_currentStreak >= 3}
-				<div class="grid grid-cols-1 grid-rows-1 ml-1 -mt-1 place-items-center">
+			<div class="grid grid-cols-1 grid-rows-1 ml-1 -mt-1 place-items-center">
+				{#if player.s1_onAStreak && player.s1_currentStreak >= 3}
 					<span class="col-start-1 row-start-1 opacity-50">🔥</span>
 					<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-white">
 						{player.s1_currentStreak}
 					</span>
-				</div>
-			{/if}
+				{:else}
+					<span class="w-5"></span>
+				{/if}
+			</div>
 		</div>
 		<span class="text-sm font-normal normal-case text-gray-50/75">
 			{player.s1_ranked ? player.s1_score : 'Not Ranked'}
 		</span>
 	</a>
 	<div
-		in:slide={{ delay: 1100, duration: 750, easing: quadOut }}
-		class="relative h-32 rounded-t-md"
+		in:slide={slideAnimation[place]}
+		class="relative rounded-t-md"
 		class:gold-bar={place === 1}
 		class:silver-bar={place === 2}
 		class:bronze-bar={place === 3}
@@ -68,6 +82,7 @@
 
 <style lang="postcss">
 	.gold-bar {
+		height: 128px;
 		background: radial-gradient(
 				ellipse farthest-corner at right bottom,
 				#fedb37 0%,
@@ -97,6 +112,7 @@
 	}
 
 	.silver-bar {
+		height: 96px;
 		background: radial-gradient(
 				ellipse farthest-corner at right bottom,
 				#b2d5dd 0%,
@@ -127,6 +143,7 @@
 	}
 
 	.bronze-bar {
+		height: 64px;
 		background: radial-gradient(
 				ellipse farthest-corner at right bottom,
 				#fea437 0%,

@@ -26,10 +26,12 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	let result: Partial<Player>[] = players;
 	if (url.searchParams.has('simple')) {
-		result = players.map((player) => ({
-			id: player.id,
-			name: player.name
-		}));
+		result = players
+			.map((player) => ({
+				id: player.id,
+				name: player.name
+			}))
+			.sort((a, b) => (a.name < b.name ? -1 : 1));
 	}
 
 	return new Response(JSON.stringify(result));

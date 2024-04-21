@@ -1,60 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import type { Player, Team } from '@prisma/client';
-	import Dialog from '../lib/components/Dialog.svelte';
-	import { enhance } from '$app/forms';
+	import type { Player } from '@prisma/client';
 	import Icon from '../lib/components/Icon.svelte';
 
-	type SortType = 'byWins' | 'byTotal' | 'byScore' | 'byLosses';
-
-	let playerCreateDialog: HTMLDialogElement;
-	let playerEditDialog: HTMLDialogElement;
-
 	export let playerData: Player[];
-
-	let playerSort: SortType = 'byScore';
-
-	const shouldCloseModal = () => {
-		if ($page.form?.success) {
-			playerCreateDialog?.close();
-			playerEditDialog?.close();
-		}
-	};
-
-	// const createButtonModal = () => playerCreateDialog.showModal();
-
-	$: sortedPlayersData = (playerData: Player[], sortType: SortType): Player[] => {
-		const combinedPlayerData = playerData.map((player) => {
-			return {
-				...player
-			};
-		});
-
-		if (sortType === 'byWins') {
-			return combinedPlayerData.sort((p1, p2) => {
-				return p1.s1_wins < p2.s1_wins ? 1 : -1;
-			});
-		}
-
-		if (sortType === 'byTotal') {
-			return combinedPlayerData.sort((p1, p2) => {
-				return p1.s1_totalGames < p2.s1_totalGames ? 1 : -1;
-			});
-		}
-
-		if (sortType === 'byLosses') {
-			return combinedPlayerData.sort((p1, p2) => {
-				return p1.s1_lossess < p2.s1_lossess ? 1 : -1;
-			});
-		}
-
-		return combinedPlayerData;
-	};
-
-	$: {
-		$page.form;
-		shouldCloseModal();
-	}
 </script>
 
 <div>
@@ -153,11 +101,11 @@
     </form>
   </Dialog> -->
 
-	{#each sortedPlayersData(playerData, playerSort) as player, index}
+	{#each playerData as player, index}
 		<a
 			href={`/players/${player.name}`}
-			class="grid items-center grid-cols-3 py-2 pl-2 pr-4 mx-2 mb-2 bg-gray-900 rounded-lg w-vw"
-			class:opacity-20={!player.s1_ranked}
+			class="relative grid items-center grid-cols-3 py-2 pl-2 pr-4 mx-2 mb-2 overflow-hidden bg-gray-900 rounded-lg w-vw"
+			class:opacity-20={index !== 0}
 		>
 			<div class="flex items-center col-span-2">
 				<div class="flex w-12 gap-1">
@@ -173,14 +121,23 @@
 					</div>
 				</div>
 				<div class="flex flex-col items-start">
-					<span class="font-bold">{player.name}</span>
+					<span class="flex gap-1.5 font-bold">
+						{player.name}
+						{#if player.s1_onAStreak && player.s1_currentStreak >= 3}
+							<div class="grid grid-cols-1 grid-rows-1 place-items-center">
+								<span class="col-start-1 row-start-1 opacity-50">🔥</span>
+								<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-white">
+									{player.s1_currentStreak}
+								</span>
+							</div>
+						{/if}
+					</span>
 					<div class="text-[9px] uppercase text-gray-400">
 						{player.s1_wins} Won | {player.s1_lossess} Lost | {player.s1_totalGames} matches
 					</div>
 				</div>
-				<!-- <div>🔥</div> -->
 			</div>
-			<div class="flex items-center justify-end gap-4">
+			<div class="flex items-center justify-end gap-2">
 				<div class="text-[10px] text-green-600">+12</div>
 				<div class="text-lg">
 					{player.s1_score}

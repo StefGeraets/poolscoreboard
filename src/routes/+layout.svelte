@@ -15,7 +15,7 @@
 	};
 </script>
 
-<main class="bg-gray-950">
+<main class="antialiased bg-gray-950">
 	<MatchForm formOpen={matchFormOpen} toggleForm={toggleMatchForm} />
 
 	<section class="pb-28">
