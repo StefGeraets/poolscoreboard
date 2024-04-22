@@ -222,8 +222,8 @@ export const actions: Actions = {
 				...streakData(losingPlayer),
 				s1_score: loseScore.s1_score,
 				s1_ranked: loseScore.s1_ranked,
-				s1_lossess: winningPlayer.s1_lossess + 1,
-				s1_totalGames: winningPlayer.s1_totalGames + 1
+				s1_lossess: losingPlayer.s1_lossess + 1,
+				s1_totalGames: losingPlayer.s1_totalGames + 1
 			}
 		});
 

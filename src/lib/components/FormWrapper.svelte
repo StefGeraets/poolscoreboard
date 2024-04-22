@@ -7,7 +7,7 @@
 </script>
 
 {#if formOpen}
-	<div class="fixed z-10 grid w-screen h-screen grid-cols-1 grid-rows-1 px-4 overscroll-none">
+	<div class="fixed z-50 grid w-screen h-screen grid-cols-1 grid-rows-1 px-4 overscroll-none">
 		<button
 			class="absolute inset-0 bg-black/60 backdrop-blur"
 			on:click={toggleForm}

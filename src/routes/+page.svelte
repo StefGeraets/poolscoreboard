@@ -2,13 +2,13 @@
 	import PlayerCard from './PlayerCard.svelte';
 	import { onMount } from 'svelte';
 	import PageHeader from '../lib/components/PageHeader.svelte';
-	import type { Player } from '@prisma/client';
 	import Podium from '../lib/components/Podium.svelte';
 	import { slide } from 'svelte/transition';
-
-	type FilterOptions = 'score' | 'wins' | 'losses' | 'total';
-	type CompareOptions = 'daily' | 'weekly' | 'monthly';
-
+	import {
+		filterPlayers,
+		type FilterOptions,
+		type CompareOptions
+	} from '../lib/utils/playerSorting';
 	export let data;
 
 	let currentFilter: FilterOptions = 'score';
@@ -28,62 +28,7 @@
 		filterOpen = !filterOpen;
 	};
 
-	const sortedPlayersData = (sortType: FilterOptions, players: Player[]): Player[] => {
-		if (sortType === 'wins') {
-			return players.sort((p1, p2) => {
-				if (p1.s1_wins < p2.s1_wins) return 1;
-				if (p1.s1_wins > p2.s1_wins) return -1;
-
-				if (p1.s1_score < p2.s1_score) return 1;
-				if (p1.s1_score > p2.s1_score) return -1;
-
-				return 0;
-			});
-		}
-
-		if (sortType === 'total') {
-			return players.sort((p1, p2) => {
-				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
-				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
-
-				if (p1.s1_score < p2.s1_score) return 1;
-				if (p1.s1_score > p2.s1_score) return -1;
-
-				return 0;
-			});
-		}
-
-		if (sortType === 'losses') {
-			return players.sort((p1, p2) => {
-				if (p1.s1_lossess < p2.s1_lossess) return 1;
-				if (p1.s1_lossess > p2.s1_lossess) return -1;
-
-				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
-				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
-
-				return 0;
-			});
-		}
-
-		if (sortType === 'score') {
-			return players.sort((p1, p2) => {
-				if (p1.s1_score < p2.s1_score) return 1;
-				if (p1.s1_score > p2.s1_score) return -1;
-
-				if (p1.s1_wins < p2.s1_wins) return 1;
-				if (p1.s1_wins > p2.s1_wins) return -1;
-
-				if (p1.s1_totalGames < p2.s1_totalGames) return 1;
-				if (p1.s1_totalGames > p2.s1_totalGames) return -1;
-
-				return 0;
-			});
-		}
-
-		return players;
-	};
-
-	$: playerData = sortedPlayersData(currentFilter, data.players);
+	$: playerData = filterPlayers(currentFilter, data.players);
 </script>
 
 <PageHeader title="Pool Scoreboard">

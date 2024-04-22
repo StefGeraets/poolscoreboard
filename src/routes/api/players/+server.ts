@@ -34,5 +34,41 @@ export const GET: RequestHandler = async ({ url }) => {
 			.sort((a, b) => (a.name < b.name ? -1 : 1));
 	}
 
+	if (url.searchParams.has('daily')) {
+		result = players.sort((p1, p2) => {
+			if (p1.s1_dayScore < p2.s1_dayScore) return 1;
+			if (p1.s1_dayScore > p2.s1_dayScore) return -1;
+
+			if (p1.name < p2.name) return 1;
+			if (p1.name > p2.name) return -1;
+
+			return 0;
+		});
+	}
+
+	if (url.searchParams.has('weekly')) {
+		result = players.sort((p1, p2) => {
+			if (p1.s1_weekScore < p2.s1_weekScore) return 1;
+			if (p1.s1_weekScore > p2.s1_weekScore) return -1;
+
+			if (p1.name < p2.name) return 1;
+			if (p1.name > p2.name) return -1;
+
+			return 0;
+		});
+	}
+
+	if (url.searchParams.has('monthly')) {
+		result = players.sort((p1, p2) => {
+			if (p1.s1_monthScore < p2.s1_monthScore) return 1;
+			if (p1.s1_monthScore > p2.s1_monthScore) return -1;
+
+			if (p1.name < p2.name) return 1;
+			if (p1.name > p2.name) return -1;
+
+			return 0;
+		});
+	}
+
 	return new Response(JSON.stringify(result));
 };

@@ -27,7 +27,9 @@
 		class="flex flex-col pb-3 font-black leading-none text-center uppercase"
 	>
 		<div class="flex items-center justify-center">
-			<div class="text-[8px] grid grid-rows-2 place-items-center place-content-center mr-1.5">
+			<div
+				class="text-[8px] grid grid-rows-2 place-items-center place-content-center mr-0.5 -mt-[1.5px] w-5"
+			>
 				{#if true}
 					<div class="self-start text-green-600">
 						<Icon name="arrowUp" size={10} />
@@ -37,11 +39,11 @@
           <Icon name="arrowDown" size={10} />
         </div> -->
 				{:else}
-					<span class="w-2.5"></span>
+					<span></span>
 				{/if}
 			</div>
 			{player.name}
-			<div class="grid grid-cols-1 grid-rows-1 ml-1 -mt-1 place-items-center">
+			<div class="grid grid-cols-1 grid-rows-1 ml-0.5 -mt-1 place-items-center">
 				{#if player.s1_onAStreak && player.s1_currentStreak >= 3}
 					<span class="col-start-1 row-start-1 opacity-50">🔥</span>
 					<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-white">
