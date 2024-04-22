@@ -32,6 +32,8 @@
 			if (result.type === 'success') {
 				working = false;
 				toggleForm();
+				selectedPlayer1 = 0;
+				selectedPlayer2 = 0;
 				update();
 			}
 		};

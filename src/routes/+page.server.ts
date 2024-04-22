@@ -1,5 +1,5 @@
 import { fail, type Actions } from '@sveltejs/kit';
-import DB from '../lib';
+import DB from '$lib';
 import type { PageServerLoad } from './$types';
 // import { players } from '../lib/db/fetches';
 import type { Player } from '@prisma/client';

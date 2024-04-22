@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Player } from '@prisma/client';
-	import Icon from '../lib/components/Icon.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 
 	export let playerData: Player[];
 </script>

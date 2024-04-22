@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PageHeader from '../../../lib/components/PageHeader.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

@@ -1,14 +1,10 @@
 <script lang="ts">
 	import PlayerCard from './PlayerCard.svelte';
 	import { onMount } from 'svelte';
-	import PageHeader from '../lib/components/PageHeader.svelte';
-	import Podium from '../lib/components/Podium.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import Podium from '$lib/components/Podium.svelte';
 	import { slide } from 'svelte/transition';
-	import {
-		filterPlayers,
-		type FilterOptions,
-		type CompareOptions
-	} from '../lib/utils/playerSorting';
+	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerSorting';
 	export let data;
 
 	let currentFilter: FilterOptions = 'score';
@@ -84,20 +80,26 @@
 		on:click={() => (compareOption = 'daily')}
 		class="py-1 uppercase"
 		class:bg-gray-900={compareOption === 'daily'}
-		class:text-blue-400={compareOption === 'daily'}>daily</button
+		class:text-blue-400={compareOption === 'daily'}
 	>
+		daily
+	</button>
 	<button
 		on:click={() => (compareOption = 'weekly')}
 		class="py-1 uppercase"
 		class:bg-gray-900={compareOption === 'weekly'}
-		class:text-blue-400={compareOption === 'weekly'}>weekly</button
+		class:text-blue-400={compareOption === 'weekly'}
 	>
+		weekly
+	</button>
 	<button
 		on:click={() => (compareOption = 'monthly')}
 		class="py-1 uppercase"
 		class:bg-gray-900={compareOption === 'monthly'}
-		class:text-blue-400={compareOption === 'monthly'}>monthly</button
+		class:text-blue-400={compareOption === 'monthly'}
 	>
+		monthly
+	</button>
 </section>
 
 <div class="grid grid-cols-3 items-end gap-2 px-4 h-[180px] lg:max-w-2xl mx-auto">

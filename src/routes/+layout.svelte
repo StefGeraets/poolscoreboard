@@ -1,10 +1,10 @@
 <script lang="ts">
 	import '../satoshi.css';
 	import '../app.css';
-	import MatchForm from '../lib/components/MatchForm.svelte';
+	import MatchForm from '$lib/components/MatchForm.svelte';
 
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-	import PageFooter from '../lib/components/PageFooter.svelte';
+	import PageFooter from '$lib/components/PageFooter.svelte';
 
 	injectSpeedInsights();
 
