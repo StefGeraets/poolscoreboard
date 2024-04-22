@@ -124,7 +124,7 @@
 			{#if !working}
 				Save
 			{:else}
-				<Icon name="loader" />
+				<Icon name="loader" class="mx-auto animate-spin" />
 			{/if}
 		</button>
 	</form>

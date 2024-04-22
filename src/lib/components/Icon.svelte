@@ -3,6 +3,8 @@
 
 	export let name: keyof typeof iconPaths;
 	export let size: number = 24;
+	let className: string = '';
+	export { className as class };
 
 	$: paths = iconPaths[name] || [];
 </script>
@@ -17,6 +19,7 @@
 	stroke-width="2"
 	stroke-linecap="round"
 	stroke-linejoin="round"
+	class={className || ''}
 >
 	<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 	{#each paths as path}

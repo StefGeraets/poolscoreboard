@@ -13,7 +13,7 @@
 	<slot name="left">
 		{#if !isHome && !isPlayer}
 			<a href="/">
-				<Icon name="home" />
+				<Icon name="trophy" />
 			</a>
 		{:else if isPlayer}
 			<a href="/players">

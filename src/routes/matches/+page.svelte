@@ -17,7 +17,7 @@
 
 <footer class="flex items-center justify-between grid-cols-3 px-2 pb-4">
 	<div class="w-20">
-		{#if currentPage !== 0}
+		{#if currentPage !== 0 && data.count !== 0}
 			<a
 				href="/matches?page={currentPage - 1}"
 				class="flex items-center justify-center px-2 py-2 text-sm uppercase border rounded border-gray-700/20 bg-gray-900/50"
@@ -32,7 +32,7 @@
 	</header>
 
 	<div class="w-20">
-		{#if currentPage !== totalPages - 1}
+		{#if currentPage !== totalPages - 1 && data.count !== 0}
 			<a
 				href="/matches?page={currentPage + 1}"
 				class="flex items-center justify-center px-2 py-2 text-sm uppercase border rounded border-gray-700/20 bg-gray-900/50"
@@ -84,7 +84,7 @@
 
 <footer class="flex justify-between px-2 pt-2">
 	<div>
-		{#if currentPage !== 0}
+		{#if currentPage !== 0 && data.count !== 0}
 			<a
 				href="/matches?page={currentPage - 1}"
 				class="flex items-center px-2 py-2 text-sm uppercase border rounded border-gray-700/20 bg-gray-900/50"
@@ -95,7 +95,7 @@
 		{/if}
 	</div>
 	<div>
-		{#if currentPage !== totalPages - 1}
+		{#if currentPage !== totalPages - 1 && data.count !== 0}
 			<a
 				href="/matches?page={currentPage + 1}"
 				class="flex items-center px-2 py-2 text-sm uppercase border rounded border-gray-700/20 bg-gray-900/50"
