@@ -4,13 +4,13 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Podium from '$lib/components/Podium.svelte';
 	import { slide } from 'svelte/transition';
-	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerSorting';
+	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerHelpers';
+	import { compare } from '../lib/stores';
 	export let data;
 
 	let currentFilter: FilterOptions = 'score';
 	let ready: boolean = false;
 	let filterOpen: boolean = false;
-	let compareOption: CompareOptions = 'weekly';
 
 	const filterOptions: FilterOptions[] = ['score', 'wins', 'losses', 'total'];
 
@@ -22,6 +22,10 @@
 
 	const openFilter = (): void => {
 		filterOpen = !filterOpen;
+	};
+
+	const setCompare = (type: CompareOptions) => {
+		compare.set(type);
 	};
 
 	$: playerData = filterPlayers(currentFilter, data.players);
@@ -77,26 +81,26 @@
 	class="grid grid-cols-3 mx-4 mb-8 overflow-hidden text-xs text-gray-500 border rounded bg-gray-900/20 border-gray-800/30"
 >
 	<button
-		on:click={() => (compareOption = 'daily')}
+		on:click={() => setCompare('daily')}
 		class="py-1 uppercase"
-		class:bg-gray-900={compareOption === 'daily'}
-		class:text-blue-400={compareOption === 'daily'}
+		class:bg-gray-900={$compare === 'daily'}
+		class:text-blue-400={$compare === 'daily'}
 	>
 		daily
 	</button>
 	<button
-		on:click={() => (compareOption = 'weekly')}
+		on:click={() => setCompare('weekly')}
 		class="py-1 uppercase"
-		class:bg-gray-900={compareOption === 'weekly'}
-		class:text-blue-400={compareOption === 'weekly'}
+		class:bg-gray-900={$compare === 'weekly'}
+		class:text-blue-400={$compare === 'weekly'}
 	>
 		weekly
 	</button>
 	<button
-		on:click={() => (compareOption = 'monthly')}
+		on:click={() => setCompare('monthly')}
 		class="py-1 uppercase"
-		class:bg-gray-900={compareOption === 'monthly'}
-		class:text-blue-400={compareOption === 'monthly'}
+		class:bg-gray-900={$compare === 'monthly'}
+		class:text-blue-400={$compare === 'monthly'}
 	>
 		monthly
 	</button>

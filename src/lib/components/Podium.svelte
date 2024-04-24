@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { Player } from '@prisma/client';
 	import { fly, slide, type FlyParams, type SlideParams } from 'svelte/transition';
 	import Icon from './Icon.svelte';
 	import { expoInOut, quadOut } from 'svelte/easing';
+	import { compareScore, type RankedPlayer } from '$lib/utils/playerHelpers';
+	import { compare } from '$lib/stores';
 
-	export let player: Player;
+	export let player: RankedPlayer;
 	export let place: 1 | 2 | 3 = 1;
 
 	const flyAnimation: Record<'1' | '2' | '3', FlyParams> = {
@@ -20,7 +21,7 @@
 	};
 </script>
 
-<div>
+<div class:opacity-50={!player.s1_ranked}>
 	<a
 		href={`/players/${player.name}`}
 		in:fly={flyAnimation[place]}
@@ -30,14 +31,23 @@
 			<div
 				class="text-[8px] grid grid-rows-2 place-items-center place-content-center mr-0.5 -mt-[1.5px] w-5"
 			>
-				{#if true}
-					<div class="self-start text-green-600">
-						<Icon name="arrowUp" size={10} />
+				{#if player[`${$compare}Rank`] !== 0}
+					{#if Math.sign(player[`${$compare}Rank`]) === 1}
+						<div class="self-start text-green-600">
+							<Icon name="arrowUp" size={10} />
+						</div>
+					{/if}
+					<div
+						class:text-green-600={Math.sign(player[`${$compare}Rank`]) === 1}
+						class:text-red-600={Math.sign(player[`${$compare}Rank`]) === -1}
+					>
+						{Math.sign(player[`${$compare}Rank`]) === 1 ? '+' : ''}{player[`${$compare}Rank`]}
 					</div>
-					<div class="text-green-600">+2</div>
-					<!-- <div class="self-end text-red-600">
-          <Icon name="arrowDown" size={10} />
-        </div> -->
+					{#if Math.sign(player[`${$compare}Rank`]) === -1}
+						<div class="self-end text-red-600">
+							<Icon name="arrowDown" size={10} />
+						</div>
+					{/if}
 				{:else}
 					<span></span>
 				{/if}
@@ -54,9 +64,18 @@
 				{/if}
 			</div>
 		</div>
-		<span class="text-sm font-normal normal-case text-gray-50/75">
-			{player.s1_ranked ? player.s1_score : 'Not Ranked'}
-		</span>
+		<div
+			class="flex items-center justify-center gap-1 text-sm font-normal normal-case text-gray-50/75"
+		>
+			<div
+				class="text-[9px]"
+				class:text-green-600={Math.sign(compareScore(player, $compare)) === 1}
+				class:text-red-600={Math.sign(compareScore(player, $compare)) === -1}
+			>
+				{Math.sign(compareScore(player, $compare)) === 1 ? '+' : ''}{compareScore(player, $compare)}
+			</div>
+			{player.s1_score}
+		</div>
 	</a>
 	<div
 		in:slide={slideAnimation[place]}

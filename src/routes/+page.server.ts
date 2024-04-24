@@ -1,11 +1,11 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import DB from '$lib';
 import type { PageServerLoad } from './$types';
-// import { players } from '../lib/db/fetches';
 import type { Player } from '@prisma/client';
+import type { RankedPlayer } from '../lib/utils/playerHelpers';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-	const players = await fetch(`/api/players`).then((r) => r.json());
+	const players: RankedPlayer[] = await fetch(`/api/players`).then((r) => r.json());
 
 	return {
 		players: await players

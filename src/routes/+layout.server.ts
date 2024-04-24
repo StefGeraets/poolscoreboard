@@ -6,7 +6,7 @@ type SimplePlayer = {
 };
 
 export const load: LayoutServerLoad = async ({ fetch }) => {
-	const playersList: SimplePlayer[] = await fetch(`/api/players?simple=true`).then((r) => r.json());
+	const playersList: SimplePlayer[] = await fetch(`/api/players?simple`).then((r) => r.json());
 
 	return {
 		playersList

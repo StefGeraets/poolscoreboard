@@ -2,8 +2,13 @@ import type { Player } from '@prisma/client';
 
 export type FilterOptions = 'score' | 'wins' | 'losses' | 'total';
 export type CompareOptions = 'daily' | 'weekly' | 'monthly';
+export type RankedPlayer = Player & {
+	dailyRank: number;
+	weeklyRank: number;
+	monthlyRank: number;
+};
 
-export const filterPlayers = (sortType: FilterOptions, players: Player[]): Player[] => {
+export const filterPlayers = (sortType: FilterOptions, players: RankedPlayer[]): RankedPlayer[] => {
 	if (sortType === 'wins') {
 		return players.sort((p1, p2) => {
 			if (p1.s1_wins < p2.s1_wins) return 1;
@@ -60,4 +65,11 @@ export const filterPlayers = (sortType: FilterOptions, players: Player[]): Playe
 
 export const previousPlayerRanking = (compareType: CompareOptions, players: Player[]): Player[] => {
 	return players;
+};
+
+export const compareScore = (player: RankedPlayer, compare: CompareOptions): number => {
+	if (compare === 'daily') return player.s1_score - player.s1_dayScore;
+	if (compare === 'weekly') return player.s1_score - player.s1_weekScore;
+	if (compare === 'monthly') return player.s1_score - player.s1_monthScore;
+	return 0;
 };

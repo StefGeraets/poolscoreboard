@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Player } from '@prisma/client';
 	import Icon from '$lib/components/Icon.svelte';
+	import { compare } from '$lib/stores';
+	import { type CompareOptions, type RankedPlayer, compareScore } from '../lib/utils/playerHelpers';
 
-	export let playerData: Player[];
+	export let playerData: RankedPlayer[];
 </script>
 
 <div>
@@ -110,15 +111,26 @@
 			<div class="flex items-center col-span-2">
 				<div class="flex w-12 gap-1">
 					<span class="w-5 pt-0.5">{index + 4}.</span>
-					<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3 place-items-center">
-						<div class="self-start text-green-600">
-							<Icon name="arrowUp" size={12} />
+					{#if player[`${$compare}Rank`] !== 0}
+						<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3 place-items-center">
+							<div class="self-start text-green-600">
+								{#if Math.sign(player[`${$compare}Rank`]) === 1}
+									<Icon name="arrowUp" size={12} />
+								{/if}
+							</div>
+							<div
+								class:text-green-600={Math.sign(player[`${$compare}Rank`]) === 1}
+								class:text-red-600={Math.sign(player[`${$compare}Rank`]) === -1}
+							>
+								{Math.sign(player[`${$compare}Rank`]) === 1 ? '+' : ''}{player[`${$compare}Rank`]}
+							</div>
+							<div class="self-end text-red-600">
+								{#if Math.sign(player[`${$compare}Rank`]) === -1}
+									<Icon name="arrowDown" size={12} />
+								{/if}
+							</div>
 						</div>
-						<div class="text-green-600">+2</div>
-						<div class="self-end text-red-600">
-							<!-- <Icon name="arrowDown" size={12} /> -->
-						</div>
-					</div>
+					{/if}
 				</div>
 				<div class="flex flex-col items-start">
 					<span class="flex gap-1.5 font-bold">
@@ -138,7 +150,16 @@
 				</div>
 			</div>
 			<div class="flex items-center justify-end gap-2">
-				<div class="text-[10px] text-green-600">+12</div>
+				<div
+					class="text-[10px]"
+					class:text-green-600={Math.sign(compareScore(player, $compare)) === 1}
+					class:text-red-600={Math.sign(compareScore(player, $compare)) === -1}
+				>
+					{Math.sign(compareScore(player, $compare)) === 1 ? '+' : ''}{compareScore(
+						player,
+						$compare
+					)}
+				</div>
 				<div class="text-lg">
 					{player.s1_score}
 				</div>
