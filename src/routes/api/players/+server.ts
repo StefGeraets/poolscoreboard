@@ -75,7 +75,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		});
 
 	const playersWithRanking: RankedPlayer[] = players.map((player, i) => {
-		const currRank = i + 1;
+		const currRank = player.s1_ranked ? i + 1 : 0;
 		const dailyRanking = dailyRankedPlayers.findIndex((p) => p.id === player.id) + 1;
 		const weeklyRanking = weeklyRankedPlayers.findIndex((p) => p.id === player.id) + 1;
 		const monthlyRanking = monthlyRankedPlayers.findIndex((p) => p.id === player.id) + 1;

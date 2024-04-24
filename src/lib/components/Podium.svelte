@@ -67,13 +67,18 @@
 		<div
 			class="flex items-center justify-center gap-1 text-sm font-normal normal-case text-gray-50/75"
 		>
-			<div
-				class="text-[9px]"
-				class:text-green-600={Math.sign(compareScore(player, $compare)) === 1}
-				class:text-red-600={Math.sign(compareScore(player, $compare)) === -1}
-			>
-				{Math.sign(compareScore(player, $compare)) === 1 ? '+' : ''}{compareScore(player, $compare)}
-			</div>
+			{#if compareScore(player, $compare) !== 0}
+				<div
+					class="text-[9px]"
+					class:text-green-600={Math.sign(compareScore(player, $compare)) === 1}
+					class:text-red-600={Math.sign(compareScore(player, $compare)) === -1}
+				>
+					{Math.sign(compareScore(player, $compare)) === 1 ? '+' : ''}{compareScore(
+						player,
+						$compare
+					)}
+				</div>
+			{/if}
 			{player.s1_score}
 		</div>
 	</a>

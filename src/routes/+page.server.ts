@@ -53,7 +53,7 @@ export const actions: Actions = {
 	addPlayer: async ({ request }) => {
 		const data = await request.formData();
 		const name = String(data.get('name'));
-		const teamId = Number(data.get('team'));
+		// const teamId = Number(data.get('team')) || 1;
 
 		if (!name) {
 			return fail(400, { name, missing: true });
@@ -67,7 +67,7 @@ export const actions: Actions = {
 			.trim();
 
 		await DB.player.create({
-			data: { name: strippedName, teamId }
+			data: { name: strippedName, teamId: 1 }
 		});
 
 		return { success: true };
@@ -196,7 +196,7 @@ export const actions: Actions = {
 				player1Id,
 				player2Id,
 				winnerId,
-				method,
+				method: 'fair',
 				s1: true,
 				s1_pointsWon: winScore._score,
 				s1_pointsLost: loseScore._score

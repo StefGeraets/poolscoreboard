@@ -9,7 +9,7 @@
 		$page.url.pathname.split('/').length > 2 && $page.url.pathname.split('/').includes('players');
 </script>
 
-<header class="grid items-center grid-cols-4 py-4 mx-2 text-xl bg-gray-950">
+<header class="grid content-center grid-cols-4 py-4 mx-2 text-xl bg-gray-950">
 	<slot name="left">
 		{#if !isHome && !isPlayer}
 			<a href="/">
