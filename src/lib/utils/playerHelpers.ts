@@ -73,3 +73,7 @@ export const compareScore = (player: RankedPlayer, compare: CompareOptions): num
 	if (compare === 'monthly') return player.s1_score - player.s1_monthScore;
 	return 0;
 };
+
+export const isPositive = (num: number) => {
+	return Math.sign(num) === 1 ? true : false;
+};

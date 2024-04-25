@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import { compare } from '$lib/stores';
-	import { type CompareOptions, type RankedPlayer, compareScore } from '../lib/utils/playerHelpers';
+	import { type RankedPlayer, compareScore, isPositive } from '../lib/utils/playerHelpers';
 
 	export let playerData: RankedPlayer[];
 </script>
@@ -53,18 +53,18 @@
 					{#if player[`${$compare}Rank`] !== 0}
 						<div class="-mt-1 -mb-1 text-[8px] grid grid-rows-3 place-items-center">
 							<div class="self-start text-green-600">
-								{#if Math.sign(player[`${$compare}Rank`]) === 1}
+								{#if isPositive(player[`${$compare}Rank`])}
 									<Icon name="arrowUp" size={12} />
 								{/if}
 							</div>
 							<div
-								class:text-green-600={Math.sign(player[`${$compare}Rank`]) === 1}
-								class:text-red-600={Math.sign(player[`${$compare}Rank`]) === -1}
+								class:text-green-600={isPositive(player[`${$compare}Rank`])}
+								class:text-red-600={!isPositive(player[`${$compare}Rank`])}
 							>
-								{Math.sign(player[`${$compare}Rank`]) === 1 ? '+' : ''}{player[`${$compare}Rank`]}
+								{isPositive(player[`${$compare}Rank`]) ? '+' : ''}{player[`${$compare}Rank`]}
 							</div>
 							<div class="self-end text-red-600">
-								{#if Math.sign(player[`${$compare}Rank`]) === -1}
+								{#if !isPositive(player[`${$compare}Rank`])}
 									<Icon name="arrowDown" size={12} />
 								{/if}
 							</div>
@@ -92,13 +92,10 @@
 				{#if compareScore(player, $compare) !== 0}
 					<div
 						class="text-[10px]"
-						class:text-green-600={Math.sign(compareScore(player, $compare)) === 1}
-						class:text-red-600={Math.sign(compareScore(player, $compare)) === -1}
+						class:text-green-600={isPositive(compareScore(player, $compare))}
+						class:text-red-600={!isPositive(compareScore(player, $compare))}
 					>
-						{Math.sign(compareScore(player, $compare)) === 1 ? '+' : ''}{compareScore(
-							player,
-							$compare
-						)}
+						{isPositive(compareScore(player, $compare)) ? '+' : ''}{compareScore(player, $compare)}
 					</div>
 				{/if}
 				<div class="text-lg">

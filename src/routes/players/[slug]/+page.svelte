@@ -6,36 +6,47 @@
 </script>
 
 <PageHeader title={data.player.name} />
-<header class="py-5 text-center text-blue-100 bg-gray-950">
-	<h1 class="text-2xl font-black">{data.player.name}</h1>
-</header>
+
+<h1 class="mb-1 text-3xl font-black text-center">{data.player.s1_score}</h1>
 
 <div
-	class="container grid grid-cols-2 gap-1 px-1 mx-auto lg:px-32 md:px-4 md:grid-cols-4 md:gap-4 justify-items-stretch"
+	class="container grid grid-cols-3 gap-1 px-1 mx-auto lg:px-32 md:px-4 md:grid-cols-4 md:gap-4 justify-items-stretch"
 >
 	<div
-		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
 	>
-		<h2 class="text-green-400 uppercase">Wins</h2>
-		<p class="text-3xl font-black">{data.stats.wins}</p>
+		<h2 class="text-sm text-green-400 uppercase">Wins</h2>
+		<p class="text-2xl font-black">{data.player.s1_wins}</p>
 	</div>
 	<div
-		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
 	>
-		<h2 class="text-red-500 uppercase">Losses</h2>
-		<p class="text-3xl font-black">{data.stats.lossess}</p>
+		<h2 class="text-sm text-red-500 uppercase">Losses</h2>
+		<p class="text-2xl font-black">{data.player.s1_lossess}</p>
 	</div>
 	<div
-		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
 	>
-		<h2 class="text-blue-400 uppercase">Total</h2>
-		<p class="text-3xl font-black">{data.stats.amountOfGames}</p>
+		<h2 class="text-sm text-blue-400 uppercase">Total</h2>
+		<p class="text-2xl font-black">{data.player.s1_totalGames}</p>
 	</div>
 	<div
-		class="flex flex-col items-center self-start gap-1 px-8 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
 	>
-		<h2 class="uppercase">K/D</h2>
-		<p class="text-3xl font-black">{data.stats.kd}</p>
+		<h2 class="text-sm uppercase">yesterday</h2>
+		<p class="text-2xl font-black">{data.player.s1_dayScore}</p>
+	</div>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="text-sm uppercase">prev week</h2>
+		<p class="text-2xl font-black">{data.player.s1_weekScore}</p>
+	</div>
+	<div
+		class="flex flex-col items-center self-start gap-1 px-2 py-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
+	>
+		<h2 class="text-sm uppercase">prev month</h2>
+		<p class="text-2xl font-black">{data.player.s1_monthScore}</p>
 	</div>
 </div>
 
