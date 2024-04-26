@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import Icon from './Icon.svelte';
 	import { page } from '$app/stores';
+	import { clickOutside } from '../utils/clickOutside';
 
 	export let toggleMatchForm: () => void;
 
@@ -26,7 +27,7 @@
 		},
 		{
 			url: 'https://github.com/StefGeraets/poolscoreboard',
-			title: 'See sourcecode'
+			title: 'See source code'
 		}
 	];
 
@@ -89,6 +90,8 @@
 			{/if}
 			<button
 				on:click={() => (extraMenuOpen = !extraMenuOpen)}
+				use:clickOutside
+				on:outside={() => (extraMenuOpen = false)}
 				class="w-6 h-6 align-middle transition-transform"
 				class:-rotate-90={extraMenuOpen}
 			>
