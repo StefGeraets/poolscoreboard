@@ -1,6 +1,6 @@
 import DB from '$lib/prisma.js';
 import type { Player } from '@prisma/client';
-import type { RequestHandler } from '@sveltejs/kit';
+import { error, type RequestHandler } from '@sveltejs/kit';
 import type { RankedPlayer } from '$lib/utils/playerHelpers';
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -102,6 +102,6 @@ export const GET: RequestHandler = async ({ url }) => {
 		return new Response(JSON.stringify(result));
 	} catch (e) {
 		console.log('', e);
-		return new Response(JSON.stringify('error'));
+		return error(404);
 	}
 };
