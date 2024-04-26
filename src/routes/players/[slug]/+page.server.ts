@@ -6,7 +6,7 @@ import type { Player } from '@prisma/client';
 export const load: PageServerLoad = async ({ params, fetch }) => {
 	const name = params.slug;
 	const player = await DB.player.findUnique({ where: { name } });
-	const statsRes = await fetch(`/api/winsLossess`).then((r) => r.json());
+	const statsRes = await fetch(`/api/winsLosses`).then((r) => r.json());
 
 	if (!player) return redirect(301, '/');
 
