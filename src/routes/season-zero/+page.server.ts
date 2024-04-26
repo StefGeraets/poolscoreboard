@@ -3,6 +3,9 @@ import DB from '$lib';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const winsLosses = await fetch(`/api/winsLosses`).then((r) => r.json());
+	const teams = await DB.team.findMany({
+		orderBy: [{ score: 'desc' }]
+	});
 	const players = await DB.player.findMany({
 		orderBy: [{ wins: 'desc' }],
 		include: {
@@ -12,8 +15,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 	return {
 		players: players,
-		// teams: await teams(),
-		// matches: await matches(),
+		teams: teams,
 		winsLosses: winsLosses.matchesPerPlayer
 	};
 };

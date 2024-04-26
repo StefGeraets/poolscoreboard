@@ -18,7 +18,6 @@
 
 	let playerData = data.players;
 	let winsLosses: WinLose[] = data.winsLosses;
-
 	let playerSort: SortType = 'byWins';
 
 	$: sortedPlayersData = (
@@ -73,6 +72,17 @@
 <PageHeader title="Season 0 standings" />
 
 <div class="container p-0.5 mx-auto">
+	<div class="flex items-center justify-between mb-4 overflow-hidden rounded-lg">
+		{#each data.teams.slice(0, 2) as team, i}
+			<div class="flex items-center justify-center w-1/2 py-2 bg-gray-900 border border-gray-800">
+				<h3 class="flex items-center gap-2 text-2xl font-bold uppercase">
+					{#if i === 0}🏆{/if}
+					{team.name} <span class="text-sm text-gray-200">({team.score})</span>
+				</h3>
+			</div>
+		{/each}
+	</div>
+
 	<section
 		class="self-start p-4 bg-gray-900 border border-gray-800 rounded-lg md:col-span-1 tabular-nums"
 	>
@@ -123,6 +133,10 @@
 					.
 					{#if index + 1 === 1 && player.wins !== 0}
 						🏆
+					{:else if index + 1 === 2}
+						🥈
+					{:else if index + 1 === 3}
+						🥉
 					{/if}
 					<span class="font-bold">{player.name}</span>
 				</a>
