@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fly, slide, type FlyParams, type SlideParams } from 'svelte/transition';
 	import Icon from './Icon.svelte';
-	import { expoInOut, quadOut } from 'svelte/easing';
+	import { expoInOut, expoOut, quadOut } from 'svelte/easing';
 	import { compareScore, type RankedPlayer } from '$lib/utils/playerHelpers';
 	import { compare } from '$lib/stores';
 
@@ -14,6 +14,12 @@
 		'3': { delay: 750, y: 15, opacity: 0, easing: expoInOut }
 	};
 
+	const flyAnimationDelayed: Record<'1' | '2' | '3', FlyParams> = {
+		'1': { delay: 1850, y: 15, opacity: 0, duration: 750, easing: quadOut },
+		'2': { delay: 1350, y: 15, opacity: 0, duration: 750, easing: quadOut },
+		'3': { delay: 850, y: 15, opacity: 0, duration: 750, easing: quadOut }
+	};
+
 	const slideAnimation: Record<'1' | '2' | '3', SlideParams> = {
 		'1': { delay: 1100, duration: 750, easing: quadOut },
 		'2': { delay: 600, duration: 750, easing: quadOut },
@@ -21,7 +27,7 @@
 	};
 </script>
 
-<div class:opacity-50={!player.s1_ranked}>
+<div class:opacity-50={!player.s1_ranked} class="relative">
 	<a
 		href={`/players/${player.name}`}
 		in:fly={flyAnimation[place]}
@@ -82,6 +88,12 @@
 			{player.s1_score}
 		</div>
 	</a>
+	<div
+		class="absolute inset-0 text-center -top-12 leading-none text-[150px] font-black text-gray-500 opacity-15"
+		in:fly={flyAnimationDelayed[place]}
+	>
+		{place}
+	</div>
 	<div
 		in:slide={slideAnimation[place]}
 		class="relative rounded-t-md"

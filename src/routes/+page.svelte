@@ -1,15 +1,17 @@
 <script lang="ts">
-	import PlayerCard from './PlayerCard.svelte';
 	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
+	import type { PageData } from './$types';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Podium from '$lib/components/Podium.svelte';
-	import { slide } from 'svelte/transition';
 	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerHelpers';
-	import { compare } from '../lib/stores';
-	import Icon from '../lib/components/Icon.svelte';
-	import DialogWrapper from '../lib/components/DialogWrapper.svelte';
-	import Info from '../lib/components/Info.svelte';
-	export let data;
+	import { compare } from '$lib/stores';
+	import Icon from '$lib/components/Icon.svelte';
+	import DialogWrapper from '$lib/components/DialogWrapper.svelte';
+	import Info from '$lib/components/Info.svelte';
+	import RankCard from '$lib/components/RankCard.svelte';
+
+	export let data: PageData;
 
 	let currentFilter: FilterOptions = 'score';
 	let ready: boolean = false;
@@ -96,7 +98,7 @@
 </PageHeader>
 
 <section
-	class="grid grid-cols-3 mx-4 mb-8 overflow-hidden text-xs text-gray-500 border rounded bg-gray-900/20 border-gray-800/30"
+	class="grid grid-cols-3 mx-4 mb-10 overflow-hidden text-xs text-gray-500 border rounded bg-gray-900/20 border-gray-800/30"
 >
 	<button
 		on:click={() => setCompare('daily')}
@@ -132,7 +134,9 @@
 	{/if}
 </div>
 
-<PlayerCard playerData={playerData.slice(3, -1)} />
+{#each playerData.slice(3, -1) as player, index}
+	<RankCard {player} {index} />
+{/each}
 
 <div class="pb-2"></div>
 
