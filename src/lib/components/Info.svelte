@@ -30,6 +30,23 @@
 		capped at a maximum loss of <span class="negative">5 points</span>. However, if you lose to
 		someone ranked higher than you, you won't lose any points.
 	</p>
+	<p><strong>Example:</strong> PlayerA (Rank 8) - PlayerB (Rank 5)</p>
+	<dl>
+		<dt>If PlayerA Wins:</dt>
+		<dd>
+			PlayerA wil gain: <br />10 + (Rank 8 - Rank 5 = 3) = <span class="positive">13 points</span>
+		</dd>
+		<dd>
+			PlayerB wil lose: <br />0 + (Rank 8 - Rank 5 = 3) = <span class="negative">3 points</span>
+		</dd>
+		<dt>If PlayerB Wins:</dt>
+		<dd>
+			PlayerA wil lose: <br />0 + (Rank 5 - Rank 8 = -3) = <span class="negative">0 points</span>
+		</dd>
+		<dd>
+			PlayerB wil gain: <br />10 + (Rank 5 - Rank 8 = -3) = <span class="positive">7 points</span>
+		</dd>
+	</dl>
 	<h3 class="h3">Ranking</h3>
 	<p>
 		The ranking can be viewed by comparing to previous day, week or month. The day scores are saved
@@ -88,5 +105,9 @@
 
 	.negative {
 		@apply text-red-600;
+	}
+
+	dt {
+		@apply font-bold mt-2;
 	}
 </style>

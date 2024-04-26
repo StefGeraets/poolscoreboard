@@ -89,7 +89,7 @@
 		</div>
 	</a>
 	<div
-		class="absolute inset-0 text-center -top-12 leading-none text-[150px] font-black text-gray-500 opacity-15"
+		class="absolute inset-0 text-center -top-14 pointer-events-none leading-none text-[150px] font-black text-gray-500 opacity-15"
 		in:fly={flyAnimationDelayed[place]}
 	>
 		{place}
