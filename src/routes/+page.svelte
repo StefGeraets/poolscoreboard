@@ -1,68 +1,147 @@
 <script lang="ts">
-	import TeamsCard from './TeamsCard.svelte';
-	import PlayerCard from './PlayerCard.svelte';
-	import MatchesCard from './MatchesCard.svelte';
+	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
+	import type { PageData } from './$types';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import Podium from '$lib/components/Podium.svelte';
+	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerHelpers';
+	import { compare } from '$lib/stores';
+	import Icon from '$lib/components/Icon.svelte';
+	import DialogWrapper from '$lib/components/DialogWrapper.svelte';
+	import Info from '$lib/components/Info.svelte';
+	import RankCard from '$lib/components/RankCard.svelte';
 
-	export let data;
+	export let data: PageData;
 
-	const totalScore = (teams: { score: number }[]) => {
-		return teams.reduce((sum, team) => {
-			return team.score + sum;
-		}, 0);
+	let currentFilter: FilterOptions = 'score';
+	let ready: boolean = false;
+	let filterOpen: boolean = false;
+	let openInfo: boolean = false;
+
+	const filterOptions: FilterOptions[] = ['score', 'wins', 'losses', 'total'];
+
+	$: firstPlayer = playerData.slice(0, 1)[0];
+	$: secondPlayer = playerData.slice(1, 2)[0];
+	$: thirdPlayer = playerData.slice(2, 3)[0];
+
+	onMount(() => (ready = true));
+
+	const openFilter = (): void => {
+		filterOpen = !filterOpen;
 	};
-	$: total = totalScore(data.teams);
+
+	const toggleInfo = (): void => {
+		openInfo = !openInfo;
+	};
+
+	const setCompare = (type: CompareOptions) => {
+		compare.set(type);
+	};
+
+	$: playerData = filterPlayers(currentFilter, data.players);
 </script>
 
-<header class="flex flex-col justify-center py-5 text-center text-blue-100 bg-gray-950">
-	<h1 class="text-2xl font-black">Pool Scoreboard</h1>
-	<h2 class="mt-1 text-lg uppercase text-amber-500 animate-bounce">Final Day before new season</h2>
-	<h3 class="text-sm text-gray-400">
-		Current ranking will be preserved, <br /> but not used in new season
-	</h3>
-</header>
+<DialogWrapper openDialog={openInfo} toggleDialog={toggleInfo}>
+	<Info />
+</DialogWrapper>
 
-<div class="container grid grid-cols-1 gap-4 mx-auto lg:grid-cols-7 md:grid-cols-3">
-	<PlayerCard
-		playerData={data.players}
-		teamData={data.teams}
-		winsLossess={data.winsLossess}
-		class="order-2 md:order-1"
-	/>
-	<MatchesCard playerData={data.players} matchData={data.matches} class="order-1 md:order-2" />
-	<TeamsCard teamData={data.teams} playerData={data.players} class="order-3 md:order-3" />
+<PageHeader title="Pool Scoreboard">
+	<div slot="left">
+		<button class="relative text-gray-400" on:click={toggleInfo}>
+			<Icon name="info" class="absolute inset-0 text-blue-500 opacity-75 animate-ping" />
+			<Icon name="info" />
+		</button>
+	</div>
+	<div class="self-center" slot="right">
+		<button
+			class="relative flex items-center w-full gap-1 px-2 py-1 text-xs tracking-wide text-gray-300 uppercase bg-gray-900 rounded-t"
+			class:rounded-b={!filterOpen}
+			on:click|preventDefault={openFilter}
+		>
+			{currentFilter}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="w-3 h-3 ml-auto transition-transform"
+				class:-rotate-180={filterOpen}
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+				<path d="M6 9l6 6l6 -6" />
+			</svg>
+			{#if filterOpen}
+				<div
+					class="absolute right-0 z-20 flex flex-col items-start w-full bg-gray-900 border-t rounded-b top-full border-t-gray-950"
+					transition:slide
+				>
+					{#each filterOptions as filter}
+						<button
+							class="px-2 py-1.5 flex gap-2 items-center capitalize"
+							class:text-gray-500={currentFilter === filter}
+							on:click|preventDefault={() => (currentFilter = filter)}
+						>
+							<span
+								class="block w-1 h-1 bg-blue-300 rounded-full opacity-0 indicator"
+								class:opacity-100={currentFilter === filter}
+							></span>
+							{filter}
+						</button>
+					{/each}
+				</div>
+			{/if}
+		</button>
+	</div>
+</PageHeader>
+
+<section
+	class="grid grid-cols-3 mx-4 mb-10 overflow-hidden text-xs text-gray-500 border rounded bg-gray-900/20 border-gray-800/30"
+>
+	<button
+		on:click={() => setCompare('daily')}
+		class="py-1 uppercase"
+		class:bg-gray-900={$compare === 'daily'}
+		class:text-blue-400={$compare === 'daily'}
+	>
+		daily
+	</button>
+	<button
+		on:click={() => setCompare('weekly')}
+		class="py-1 uppercase"
+		class:bg-gray-900={$compare === 'weekly'}
+		class:text-blue-400={$compare === 'weekly'}
+	>
+		weekly
+	</button>
+	<button
+		on:click={() => setCompare('monthly')}
+		class="py-1 uppercase"
+		class:bg-gray-900={$compare === 'monthly'}
+		class:text-blue-400={$compare === 'monthly'}
+	>
+		monthly
+	</button>
+</section>
+
+<div class="grid grid-cols-3 items-end gap-2 px-4 h-[180px] lg:max-w-2xl mx-auto">
+	{#if ready}
+		<Podium player={secondPlayer} place={2} />
+		<Podium player={firstPlayer} place={1} />
+		<Podium player={thirdPlayer} place={3} />
+	{/if}
 </div>
-<div class="fixed inset-x-0 bottom-0 flex items-end justify-between h-16">
-	{#each data.teams.slice(0, 2) as team, i}
-		<div
-			class="flex items-center justify-center"
-			class:bg-green-800={i === 0}
-			class:bg-red-900={i === 1}
-			class:h-16={i === 0}
-			class:h-14={i === 1}
-			style="width: {(team.score / total) * 100}%"
-		>
-			<h3 class="flex items-center gap-2 text-2xl font-bold uppercase">
-				{team.name} <span class="text-sm text-gray-200">({team.score})</span>
-			</h3>
-		</div>
-	{/each}
-</div>
-<footer class="container flex justify-end pt-8 pb-32 mx-auto">
-	<a href="https://github.com/StefGeraets/poolscoreboard/issues/new" target="_blank">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="w-10 h-10 text-blue-800"
-			viewBox="0 0 24 24"
-			stroke-width="1.5"
-			stroke="currentColor"
-			fill="none"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-		>
-			<title>Add new issue</title>
-			<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path
-				d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
-			/></svg
-		>
-	</a>
-</footer>
+
+{#each playerData.slice(3, -1) as player, index}
+	<RankCard {player} {index} />
+{/each}
+
+<div class="pb-2"></div>
+
+<style lang="postcss">
+	.indicator {
+		box-shadow: 0 0 6px 0 rgb(147 197 253);
+	}
+</style>

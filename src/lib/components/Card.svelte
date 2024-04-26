@@ -20,11 +20,11 @@
 </script>
 
 <section 
-  class="bg-gray-900 rounded-lg border border-gray-800 p-4 {colSpan} md:col-span-1 tabular-nums self-start {className || ''}"
+  class="bg-gray-900 rounded-lg border border-gray-800 {colSpan} md:col-span-1 tabular-nums self-start {className || ''}"
 >
   <header class="flex justify-between align-middle">
     <h2 class="uppercase text-lg font-bold mb-4">
-      <slot name="title">Default card title</slot>
+      <slot name="title"></slot>
     </h2>
     {#if showModal}
       <button 

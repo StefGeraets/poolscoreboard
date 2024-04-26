@@ -2,7 +2,7 @@ import DB from '$lib';
 
 export const players = async () => {
 	return await DB.player.findMany({
-		orderBy: [{ wins: 'desc' }]
+		orderBy: [{ s1_score: 'desc' }]
 	});
 };
 export const teams = async () => {
@@ -12,7 +12,6 @@ export const teams = async () => {
 };
 export const matches = async () => {
 	return await DB.match.findMany({
-		orderBy: [{ createdAt: 'desc' }],
-		where: { s1: false }
+		orderBy: [{ createdAt: 'desc' }]
 	});
 };
