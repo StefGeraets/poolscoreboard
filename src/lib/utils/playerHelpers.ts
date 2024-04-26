@@ -17,6 +17,12 @@ export const filterPlayers = (sortType: FilterOptions, players: RankedPlayer[]):
 			if (p1.s1_score < p2.s1_score) return 1;
 			if (p1.s1_score > p2.s1_score) return -1;
 
+			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
+			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
+
 			return 0;
 		});
 	}
@@ -29,6 +35,12 @@ export const filterPlayers = (sortType: FilterOptions, players: RankedPlayer[]):
 			if (p1.s1_score < p2.s1_score) return 1;
 			if (p1.s1_score > p2.s1_score) return -1;
 
+			if (p1.s1_wins < p2.s1_wins) return 1;
+			if (p1.s1_wins > p2.s1_wins) return -1;
+
+			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
+
 			return 0;
 		});
 	}
@@ -38,8 +50,17 @@ export const filterPlayers = (sortType: FilterOptions, players: RankedPlayer[]):
 			if (p1.s1_lossess < p2.s1_lossess) return 1;
 			if (p1.s1_lossess > p2.s1_lossess) return -1;
 
+			if (p1.s1_score < p2.s1_score) return 1;
+			if (p1.s1_score > p2.s1_score) return -1;
+
+			if (p1.s1_wins < p2.s1_wins) return 1;
+			if (p1.s1_wins > p2.s1_wins) return -1;
+
 			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
 			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
 
 			return 0;
 		});
@@ -55,6 +76,9 @@ export const filterPlayers = (sortType: FilterOptions, players: RankedPlayer[]):
 
 			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
 			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
+
+			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
 
 			return 0;
 		});

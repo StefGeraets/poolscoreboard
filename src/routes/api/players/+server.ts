@@ -33,8 +33,8 @@ export const GET: RequestHandler = async ({ url }) => {
 			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
 			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
 
-			if (p1.name < p2.name) return 1;
-			if (p1.name > p2.name) return -1;
+			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
 
 			return 0;
 		});
@@ -51,8 +51,8 @@ export const GET: RequestHandler = async ({ url }) => {
 			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
 			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
 
-			if (p1.name < p2.name) return -1;
 			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
 
 			return 0;
 		});
@@ -68,8 +68,8 @@ export const GET: RequestHandler = async ({ url }) => {
 			if (p1.s1_totalGames < p2.s1_totalGames) return 1;
 			if (p1.s1_totalGames > p2.s1_totalGames) return -1;
 
-			if (p1.name < p2.name) return -1;
 			if (p1.name > p2.name) return 1;
+			if (p1.name < p2.name) return -1;
 
 			return 0;
 		});
