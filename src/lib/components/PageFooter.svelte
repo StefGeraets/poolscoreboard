@@ -86,7 +86,7 @@
 						<a
 							href={menuItem.url}
 							class="px-4 py-2 text-center uppercase border rounded border-gray-700/20 bg-gray-900/50"
-							class:bg-blue-800={menuItem.url.includes('season')}
+							class:bg-blue-700={menuItem.url.includes('season')}
 							target={menuItem.target}
 						>
 							{menuItem.title}
