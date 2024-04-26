@@ -6,12 +6,14 @@ export const GET: RequestHandler = async () => {
 	const matches = await DB.match.findMany();
 
 	const matchesPerPlayer = players.map((player) => {
-		const playedGames = matches.filter((match) => {
-			if (match.player1Id === player.id || match.player2Id === player.id) {
-				return true;
-			}
-			return false;
-		});
+		const playedGames = matches
+			.filter((match) => !match.s1)
+			.filter((match) => {
+				if (match.player1Id === player.id || match.player2Id === player.id) {
+					return true;
+				}
+				return false;
+			});
 
 		const losses = playedGames.length - player.wins;
 		const basicKd = Number((player.wins / losses).toFixed(2));

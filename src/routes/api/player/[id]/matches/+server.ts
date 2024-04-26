@@ -41,21 +41,21 @@ export const GET: RequestHandler = async ({ params }) => {
 			const key = `${player.name}_${opponent.name}`;
 
 			let wins = 0;
-			let lossess = 0;
+			let losses = 0;
 
 			if (player.id === game.winnerId) {
 				if (groupedGames[key]) {
 					wins = groupedGames[key].player.wins + 1;
-					lossess = groupedGames[key].opponent.wins;
+					losses = groupedGames[key].opponent.wins;
 				} else {
 					wins++;
 				}
 			} else {
 				if (groupedGames[key]) {
 					wins = groupedGames[key].player.wins;
-					lossess = groupedGames[key].opponent.wins + 1;
+					losses = groupedGames[key].opponent.wins + 1;
 				} else {
-					lossess++;
+					losses++;
 				}
 			}
 
@@ -66,7 +66,7 @@ export const GET: RequestHandler = async ({ params }) => {
 				},
 				opponent: {
 					name: opponent.name,
-					wins: lossess
+					wins: losses
 				}
 			};
 		});

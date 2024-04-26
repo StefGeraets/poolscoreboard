@@ -128,7 +128,7 @@
 				class="relative grid items-center w-full grid-cols-3 py-2 overflow-hidden border-gray-800 group"
 				class:border-b={index + 1 !== playerData.length}
 			>
-				<a href={`/player/${player.name}`}>
+				<a href={`/players/${player.name}`}>
 					{index + 1}
 					.
 					{#if index + 1 === 1 && player.wins !== 0}

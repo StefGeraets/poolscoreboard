@@ -82,9 +82,9 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		return {
 			...player,
-			dailyRank: currRank - dailyRanking,
-			weeklyRank: currRank - weeklyRanking,
-			monthlyRank: currRank - monthlyRanking
+			dailyRank: dailyRanking - currRank,
+			weeklyRank: weeklyRanking - currRank,
+			monthlyRank: monthlyRanking - currRank
 		};
 	});
 
