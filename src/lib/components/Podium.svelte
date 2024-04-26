@@ -29,7 +29,7 @@
 	>
 		<div class="flex items-center justify-center">
 			<div
-				class="text-[8px] grid grid-rows-2 place-items-center place-content-center mr-0.5 -mt-[1.5px] w-5"
+				class="text-[8px] grid grid-rows-2 place-items-center place-content-center mr-0.5 -mt-0.5 -mb-0.5 w-5"
 			>
 				{#if player[`${$compare}Rank`] !== 0}
 					{#if Math.sign(player[`${$compare}Rank`]) === 1}
