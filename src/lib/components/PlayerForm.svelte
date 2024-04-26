@@ -4,11 +4,11 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { quadIn, quadOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
-	import FormWrapper from './FormWrapper.svelte';
+	import DialogWrapper from './DialogWrapper.svelte';
 	import Icon from './Icon.svelte';
 
-	export let formOpen: boolean = true;
-	export let toggleForm: () => void;
+	export let openDialog: boolean = true;
+	export let toggleDialog: () => void;
 
 	let working: Boolean = false;
 
@@ -20,14 +20,14 @@
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				working = false;
-				toggleForm();
+				toggleDialog();
 				update();
 			}
 		};
 	};
 </script>
 
-<FormWrapper {formOpen} {toggleForm}>
+<DialogWrapper {openDialog} {toggleDialog}>
 	<!-- <form
 		method="POST"
 		action="/?/addMatch"
@@ -80,4 +80,4 @@
 			{/if}
 		</button>
 	</form>
-</FormWrapper>
+</DialogWrapper>

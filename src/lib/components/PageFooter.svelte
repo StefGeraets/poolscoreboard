@@ -9,6 +9,10 @@
 
 	const extraMenuItems: { url: string; title: string }[] = [
 		{
+			url: '/season-zero',
+			title: 'Previous Season'
+		},
+		{
 			url: 'https://github.com/StefGeraets/poolscoreboard/issues/new?labels=enhancement&template=feature_request.md&title=I%20want%20to%20be%20able%20to',
 			title: 'Suggest a new feature'
 		},
@@ -72,10 +76,11 @@
 					transition:slide
 					class="absolute right-0 flex flex-col gap-1 px-1 py-1 text-xs rounded-t shadow-md text-gray-50 bottom-full w-52 min-w-min max-w-max bg-gray-950"
 				>
-					{#each extraMenuItems as menuItem}
+					{#each extraMenuItems as menuItem, i}
 						<a
 							href={menuItem.url}
 							class="px-4 py-2 text-center uppercase border rounded border-gray-700/20 bg-gray-900/50"
+							class:bg-blue-700={i === 0}
 						>
 							{menuItem.title}
 						</a>

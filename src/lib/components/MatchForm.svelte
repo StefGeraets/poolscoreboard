@@ -4,11 +4,11 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { quadIn, quadOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
-	import FormWrapper from './FormWrapper.svelte';
+	import DialogWrapper from './DialogWrapper.svelte';
 	import Icon from './Icon.svelte';
 
-	export let formOpen: boolean = false;
-	export let toggleForm: () => void;
+	export let openDialog: boolean = false;
+	export let toggleDialog: () => void;
 
 	let working: Boolean = false;
 	let selectedPlayer1: number = 0;
@@ -31,7 +31,7 @@
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				working = false;
-				toggleForm();
+				toggleDialog();
 				selectedPlayer1 = 0;
 				selectedPlayer2 = 0;
 				update();
@@ -42,7 +42,7 @@
 	$: winnerPool = selectedPlayers(selectedPlayer1, selectedPlayer2);
 </script>
 
-<FormWrapper {formOpen} {toggleForm}>
+<DialogWrapper {openDialog} {toggleDialog}>
 	<form
 		method="POST"
 		action="/?/addMatch"
@@ -130,4 +130,4 @@
 			{/if}
 		</button>
 	</form>
-</FormWrapper>
+</DialogWrapper>

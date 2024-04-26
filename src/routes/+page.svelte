@@ -6,11 +6,15 @@
 	import { slide } from 'svelte/transition';
 	import { filterPlayers, type FilterOptions, type CompareOptions } from '$lib/utils/playerHelpers';
 	import { compare } from '../lib/stores';
+	import Icon from '../lib/components/Icon.svelte';
+	import DialogWrapper from '../lib/components/DialogWrapper.svelte';
+	import Info from '../lib/components/Info.svelte';
 	export let data;
 
 	let currentFilter: FilterOptions = 'score';
 	let ready: boolean = false;
 	let filterOpen: boolean = false;
+	let openInfo: boolean = false;
 
 	const filterOptions: FilterOptions[] = ['score', 'wins', 'losses', 'total'];
 
@@ -24,6 +28,10 @@
 		filterOpen = !filterOpen;
 	};
 
+	const toggleInfo = (): void => {
+		openInfo = !openInfo;
+	};
+
 	const setCompare = (type: CompareOptions) => {
 		compare.set(type);
 	};
@@ -31,7 +39,17 @@
 	$: playerData = filterPlayers(currentFilter, data.players);
 </script>
 
+<DialogWrapper openDialog={openInfo} toggleDialog={toggleInfo}>
+	<Info />
+</DialogWrapper>
+
 <PageHeader title="Pool Scoreboard">
+	<div slot="left">
+		<button class="relative text-gray-400" on:click={toggleInfo}>
+			<Icon name="info" class="absolute inset-0 text-blue-500 opacity-75 animate-ping" />
+			<Icon name="info" />
+		</button>
+	</div>
 	<div class="self-center" slot="right">
 		<button
 			class="relative flex items-center w-full gap-1 px-2 py-1 text-xs tracking-wide text-gray-300 uppercase bg-gray-900 rounded-t"

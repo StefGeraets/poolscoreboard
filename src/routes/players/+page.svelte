@@ -2,7 +2,7 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import type { PageData } from '../$types';
 	import PlayerForm from '$lib/components/PlayerForm.svelte';
-	import Icon from '../../lib/components/Icon.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 
 	export let data: PageData;
 
@@ -13,7 +13,7 @@
 	};
 </script>
 
-<PlayerForm formOpen={playerFormOpen} toggleForm={togglePlayerForm} />
+<PlayerForm openDialog={playerFormOpen} toggleDialog={togglePlayerForm} />
 
 <PageHeader title="Players">
 	<div slot="right" class="place-self-end">

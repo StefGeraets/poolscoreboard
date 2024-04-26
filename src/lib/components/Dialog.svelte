@@ -1,22 +1,22 @@
 <script lang="ts">
-	export let dialog: HTMLDialogElement
+	export let dialog: HTMLDialogElement;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<dialog 
-  bind:this={dialog}
-  on:close
-  on:click|self={() => dialog.close()}
-  class="bg-gray-900 border border-gray-800 rounded shadow-lg max-w-xl px-4 py-4"
+<dialog
+	bind:this={dialog}
+	on:close
+	on:click|self={() => dialog.close()}
+	class="max-w-xl px-4 py-4 bg-gray-900 border border-gray-800 rounded shadow-lg"
 >
-	<slot/>
+	<slot />
 </dialog>
 
 <style>
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.8);
-    animation: fade 0.2s ease-out;
+		animation: fade 0.2s ease-out;
 	}
 
 	dialog[open] {

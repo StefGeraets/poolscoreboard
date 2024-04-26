@@ -16,7 +16,7 @@
 </script>
 
 <main class="antialiased bg-gray-950">
-	<MatchForm formOpen={matchFormOpen} toggleForm={toggleMatchForm} />
+	<MatchForm openDialog={matchFormOpen} toggleDialog={toggleMatchForm} />
 
 	<section class="pb-28">
 		<slot />
