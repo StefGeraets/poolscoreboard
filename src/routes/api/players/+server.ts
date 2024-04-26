@@ -22,7 +22,10 @@ export const GET: RequestHandler = async ({ url }) => {
 			]
 		});
 
-		console.log('players', players);
+		console.log(
+			'players',
+			players.filter((p) => p.s1_ranked)
+		);
 
 		const dailyRankedPlayers = players
 			.filter((p) => p.s1_ranked)
@@ -93,7 +96,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			};
 		});
 
-		let result: Partial<Player>[] = await playersWithRanking;
+		let result: Partial<Player>[] = playersWithRanking;
 
 		if (url.searchParams.has('simple')) {
 			result = players
