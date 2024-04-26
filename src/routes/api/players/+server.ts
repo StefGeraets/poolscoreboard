@@ -22,11 +22,6 @@ export const GET: RequestHandler = async ({ url }) => {
 			]
 		});
 
-		console.log(
-			'players',
-			players.filter((p) => p.s1_ranked)
-		);
-
 		const dailyRankedPlayers = players
 			.filter((p) => p.s1_ranked)
 			.toSorted((p1, p2) => {
@@ -79,8 +74,6 @@ export const GET: RequestHandler = async ({ url }) => {
 
 				return 0;
 			});
-
-		console.log('sortings', dailyRankedPlayers, weeklyRankedPlayers, monthlyRankedPlayers);
 
 		const playersWithRanking: RankedPlayer[] = players.map((player, i) => {
 			const currRank = player.s1_ranked ? i + 1 : 0;
