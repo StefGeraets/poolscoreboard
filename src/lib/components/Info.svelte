@@ -18,17 +18,17 @@
 	</p>
 	<h3 class="h3">Score system</h3>
 	<p>
-		For winning a match you earn <span class="positive">10 points</span> by default. This score is
-		altered by the difference in ranking between you and your opponent. When your opponent is above
-		you in the ranking, you wil earn more point equal to the difference in standing. Up to a maximum
-		of <span class="positive">15 points</span>. When the opponent is below you in rank, you will
-		earn less points. Up to a minimum of <span class="positive">5 points</span>.
+		When you win a match, you start with <span class="positive">10 points</span>. However, this can
+		change based on the ranking gap between you and your opponent. If your opponent ranks higher
+		than you, you gain more points, up to a maximum of <span class="positive">15 points</span>,
+		depending on the difference in ranking. If your opponent ranks lower than you, you'll earn fewer
+		points, to a minimum of <span class="positive">5 points</span>.
 	</p>
 	<p>
-		When losing a match you can lose points. You lose points when you lose from an opponent that is
-		below you in the ranking. The points are determined by the difference in rank. Up to a maximum
-		of <span class="negative">5 points</span>. You will lose 0 points if you lose when your opponent
-		is above you in ranking.
+		On the flip side, when you lose a match, you might lose points. This happens if you're beaten by
+		someone ranked lower than you. The number of points you lose depends on the ranking difference,
+		capped at a maximum loss of <span class="negative">5 points</span>. However, if you lose to
+		someone ranked higher than you, you won't lose any points.
 	</p>
 	<h3 class="h3">Ranking</h3>
 	<p>

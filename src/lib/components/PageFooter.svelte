@@ -8,26 +8,31 @@
 
 	let extraMenuOpen: boolean = false;
 
-	const extraMenuItems: { url: string; title: string }[] = [
+	const extraMenuItems: { url: string; title: string; target: '_self' | '_blank' }[] = [
 		{
 			url: '/season-zero',
-			title: 'Previous Season'
+			title: 'Previous Season',
+			target: '_self'
 		},
 		{
 			url: 'https://github.com/StefGeraets/poolscoreboard/issues/new?labels=enhancement&template=feature_request.md&title=I%20want%20to%20be%20able%20to',
-			title: 'Suggest a new feature'
+			title: 'Suggest a new feature',
+			target: '_blank'
 		},
 		{
 			url: 'https://github.com/StefGeraets/poolscoreboard/issues/new?labels=bug&template=bug_report.md&title=Issue:',
-			title: 'Report a bug'
+			title: 'Report a bug',
+			target: '_blank'
 		},
 		{
 			url: 'https://github.com/StefGeraets/poolscoreboard',
-			title: 'Want to contribute?'
+			title: 'Want to contribute?',
+			target: '_blank'
 		},
 		{
 			url: 'https://github.com/StefGeraets/poolscoreboard',
-			title: 'See source code'
+			title: 'See source code',
+			target: '_blank'
 		}
 	];
 
@@ -82,6 +87,7 @@
 							href={menuItem.url}
 							class="px-4 py-2 text-center uppercase border rounded border-gray-700/20 bg-gray-900/50"
 							class:bg-blue-800={menuItem.url.includes('season')}
+							target={menuItem.target}
 						>
 							{menuItem.title}
 						</a>
