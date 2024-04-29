@@ -13,42 +13,42 @@ export const load: PageServerLoad = async ({ fetch }) => {
 };
 
 export const actions: Actions = {
-	addTeam: async ({ request }) => {
-		const data = await request.formData();
-		const name = String(data.get('name'));
+	// addTeam: async ({ request }) => {
+	// 	const data = await request.formData();
+	// 	const name = String(data.get('name'));
 
-		if (!name) {
-			return fail(400, { name, missing: true });
-		}
+	// 	if (!name) {
+	// 		return fail(400, { name, missing: true });
+	// 	}
 
-		await DB.team.create({
-			data: { name: name as string }
-		});
+	// 	await DB.team.create({
+	// 		data: { name: name as string }
+	// 	});
 
-		return { success: true };
-	},
-	deleteTeam: async ({ request }) => {
-		const data = await request.formData();
-		const id = Number(data.get('id'));
+	// 	return { success: true };
+	// },
+	// deleteTeam: async ({ request }) => {
+	// 	const data = await request.formData();
+	// 	const id = Number(data.get('id'));
 
-		await DB.team.delete({ where: { id } });
-	},
-	editTeam: async ({ request }) => {
-		const data = await request.formData();
-		const id = Number(data.get('id'));
-		const name = String(data.get('name'));
+	// 	await DB.team.delete({ where: { id } });
+	// },
+	// editTeam: async ({ request }) => {
+	// 	const data = await request.formData();
+	// 	const id = Number(data.get('id'));
+	// 	const name = String(data.get('name'));
 
-		if (!name) {
-			return fail(400, { name, missing: true });
-		}
+	// 	if (!name) {
+	// 		return fail(400, { name, missing: true });
+	// 	}
 
-		await DB.team.update({
-			where: { id },
-			data: { name }
-		});
+	// 	await DB.team.update({
+	// 		where: { id },
+	// 		data: { name }
+	// 	});
 
-		return { success: true };
-	},
+	// 	return { success: true };
+	// },
 
 	addPlayer: async ({ request }) => {
 		const data = await request.formData();
@@ -72,36 +72,36 @@ export const actions: Actions = {
 
 		return { success: true };
 	},
-	deletePlayer: async ({ request }) => {
-		const data = await request.formData();
-		const id = Number(data.get('id'));
+	// deletePlayer: async ({ request }) => {
+	// 	const data = await request.formData();
+	// 	const id = Number(data.get('id'));
 
-		await DB.player.delete({ where: { id } });
-	},
-	editPlayer: async ({ request }) => {
-		const data = await request.formData();
-		const id = Number(data.get('id'));
-		const name = String(data.get('name'));
-		const teamId = Number(data.get('team'));
+	// 	await DB.player.delete({ where: { id } });
+	// },
+	// editPlayer: async ({ request }) => {
+	// 	const data = await request.formData();
+	// 	const id = Number(data.get('id'));
+	// 	const name = String(data.get('name'));
+	// 	const teamId = Number(data.get('team'));
 
-		if (!name) {
-			return fail(400, { name, missing: true });
-		}
+	// 	if (!name) {
+	// 		return fail(400, { name, missing: true });
+	// 	}
 
-		const strippedName = name
-			.replace(
-				/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-				''
-			)
-			.trim();
+	// 	const strippedName = name
+	// 		.replace(
+	// 			/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+	// 			''
+	// 		)
+	// 		.trim();
 
-		await DB.player.update({
-			where: { id },
-			data: { name: strippedName, teamId }
-		});
+	// 	await DB.player.update({
+	// 		where: { id },
+	// 		data: { name: strippedName, teamId }
+	// 	});
 
-		return { success: true };
-	},
+	// 	return { success: true };
+	// },
 
 	addMatch: async ({ request }) => {
 		const data = await request.formData();
@@ -113,9 +113,20 @@ export const actions: Actions = {
 		const BASE_WIN_SCORE = 10;
 		const BASE_LOSE_SCORE = 0;
 		const allPlayers = await DB.player.findMany({
-			orderBy: {
-				s1_score: 'desc'
-			}
+			orderBy: [
+				{
+					s1_score: 'desc'
+				},
+				{
+					s1_wins: 'desc'
+				},
+				{
+					s1_totalGames: 'desc'
+				},
+				{
+					name: 'asc'
+				}
+			]
 		});
 
 		const gamePlayers = await DB.player.findMany({
