@@ -142,21 +142,33 @@ export const actions: Actions = {
 
 		const streakData = (player: Player, isWinning: boolean = false) => {
 			let s1_onAStreak: boolean = false;
+			let s1_onALoseStreak: boolean = false;
 			let s1_currentStreak: number = 0;
+			let s1_currentLoseStreak: number = 0;
 			const s1_longestStreak: number =
 				player.s1_longestStreak > player.s1_currentStreak
 					? player.s1_longestStreak
 					: player.s1_currentStreak;
+			const s1_longestLoseStreak: number =
+				player.s1_longestLoseStreak > player.s1_currentLoseStreak
+					? player.s1_longestLoseStreak
+					: player.s1_currentLoseStreak;
 
 			if (isWinning) {
 				s1_onAStreak = true;
 				s1_currentStreak = player.s1_currentStreak + 1;
+			} else {
+				s1_onALoseStreak = true;
+				s1_currentLoseStreak = player.s1_currentLoseStreak + 1;
 			}
 
 			return {
 				s1_onAStreak,
 				s1_currentStreak,
-				s1_longestStreak
+				s1_longestStreak,
+				s1_onALoseStreak,
+				s1_currentLoseStreak,
+				s1_longestLoseStreak
 			};
 		};
 

@@ -47,6 +47,14 @@
 						</span>
 					</div>
 				{/if}
+				{#if player.s1_onALoseStreak && player.s1_currentLoseStreak >= 3}
+					<div class="grid grid-cols-1 grid-rows-1 place-items-center">
+						<span class="col-start-1 row-start-1 opacity-50">💩</span>
+						<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-red-50">
+							{player.s1_currentLoseStreak}
+						</span>
+					</div>
+				{/if}
 			</span>
 			<div class="text-[9px] uppercase text-gray-400">
 				{player.s1_wins} Won | {player.s1_lossess} Lost | {player.s1_totalGames} matches

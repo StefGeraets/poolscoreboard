@@ -65,6 +65,11 @@
 					<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-white">
 						{player.s1_currentStreak}
 					</span>
+				{:else if player.s1_onALoseStreak && player.s1_currentLoseStreak >= 3}
+					<span class="col-start-1 row-start-1 opacity-50">💩</span>
+					<span class="z-10 col-start-1 row-start-1 pt-1 text-[10px] font-black text-red-50">
+						{player.s1_currentLoseStreak}
+					</span>
 				{:else}
 					<span class="w-5"></span>
 				{/if}
