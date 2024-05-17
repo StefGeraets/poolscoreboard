@@ -39,7 +39,7 @@
 	$: path = $page.url.pathname;
 </script>
 
-<footer class="fixed bottom-0 w-full rounded-t-2xl bg-gray-950/60 backdrop-blur-md">
+<footer class="fixed bottom-0 z-20 w-full rounded-t-2xl bg-gray-950/60 backdrop-blur-md">
 	<ul class="flex items-center justify-around">
 		<li
 			class="relative p-4 menu-item"

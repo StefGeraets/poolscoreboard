@@ -60,8 +60,12 @@
 	</p>
 	<h3 class="h3">Features</h3>
 	<p>
-		<strong>Streak: </strong> When you manage to win 3 games in a row, you wil get a 🔥 behind your name.
-		You can see on the player stats page your highest achieved win streak.
+		<strong>Win Streak: </strong> When you manage to win 3 games in a row, you wil get a 🔥 behind your
+		name. You can see on the player stats page your highest achieved win streak.
+	</p>
+	<p>
+		<strong>Lose Streak: </strong> When you are unfortunate to lose 3 games in a row, you wil get a 💩
+		behind your name. You can see on the player stats page your highest achieved lose streak.
 	</p>
 	<p>
 		<strong>Match History: </strong>Click the eight-ball in the bottom navigation to see the match
